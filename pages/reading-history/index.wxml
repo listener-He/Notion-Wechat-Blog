@@ -1,0 +1,236 @@
+<!--pages/reading-history/index.wxml-->
+<view class="reading-history-container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">阅读足迹</text>
+    <text class="page-subtitle">记录你的阅读时光</text>
+  </view>
+
+  <!-- 标签页导航 -->
+  <view class="tab-nav">
+    <view class="tab-item {{activeTab === 'history' ? 'active' : ''}}" 
+          data-tab="history" bindtap="onTabChange">
+      <text class="tab-text">阅读历史</text>
+      <view class="tab-badge" wx:if="{{historyList.length > 0}}">{{historyList.length}}</view>
+    </view>
+    <view class="tab-item {{activeTab === 'favorites' ? 'active' : ''}}" 
+          data-tab="favorites" bindtap="onTabChange">
+      <text class="tab-text">我的收藏</text>
+      <view class="tab-badge" wx:if="{{favoritesList.length > 0}}">{{favoritesList.length}}</view>
+    </view>
+    <view class="tab-item {{activeTab === 'stats' ? 'active' : ''}}" 
+          data-tab="stats" bindtap="onTabChange">
+      <text class="tab-text">阅读统计</text>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 错误状态 -->
+  <view class="error-container" wx:if="{{error && !loading}}">
+    <view class="error-icon">⚠️</view>
+    <text class="error-text">{{error}}</text>
+    <button class="retry-btn" bindtap="retry">重试</button>
+  </view>
+
+  <!-- 阅读历史标签页 -->
+  <view class="tab-content" wx:if="{{activeTab === 'history' && !loading && !error}}">
+    <!-- 工具栏 -->
+    <view class="toolbar" wx:if="{{historyList.length > 0}}">
+      <view class="sort-options">
+        <text class="toolbar-label">排序：</text>
+        <view class="sort-item {{sortBy === 'time' ? 'active' : ''}}" 
+              data-sort="time" bindtap="onSortChange">
+          <text>时间</text>
+        </view>
+        <view class="sort-item {{sortBy === 'readingTime' ? 'active' : ''}}" 
+              data-sort="readingTime" bindtap="onSortChange">
+          <text>阅读时长</text>
+        </view>
+        <view class="sort-item {{sortBy === 'category' ? 'active' : ''}}" 
+              data-sort="category" bindtap="onSortChange">
+          <text>分类</text>
+        </view>
+      </view>
+      <view class="toolbar-actions">
+        <button class="filter-btn" bindtap="toggleFilter">筛选</button>
+        <button class="clear-btn" bindtap="onClearHistory">清空</button>
+      </view>
+    </view>
+
+    <!-- 分类筛选 -->
+    <view class="filter-panel" wx:if="{{showFilter}}">
+      <view class="filter-title">按分类筛选：</view>
+      <view class="filter-tags">
+        <view class="filter-tag {{filterCategory === '' ? 'active' : ''}}" 
+              data-category="" bindtap="onCategoryFilter">
+          <text>全部</text>
+        </view>
+        <view class="filter-tag {{filterCategory === item ? 'active' : ''}}" 
+              wx:for="{{categories}}" wx:key="*this"
+              data-category="{{item}}" bindtap="onCategoryFilter">
+          <text>{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 历史记录列表 -->
+    <view class="history-list" wx:if="{{historyList.length > 0}}">
+      <view class="history-item entrance-animation" 
+            wx:for="{{historyList}}" wx:key="id"
+            wx:if="{{!filterCategory || item.category === filterCategory}}"
+            data-slug="{{item.slug}}" data-id="{{item.id}}" 
+            bindtap="onPostTap">
+        <view class="item-content">
+          <view class="item-header">
+            <text class="item-title">{{item.title}}</text>
+            <view class="item-actions">
+              <button class="delete-btn" 
+                      data-id="{{item.id}}" data-slug="{{item.slug}}"
+                      bindtap="onDeleteHistory" catchtap="true">
+                删除
+              </button>
+            </view>
+          </view>
+          <view class="item-meta">
+            <text class="item-category" wx:if="{{item.category}}">{{item.category}}</text>
+            <text class="item-time">{{item.formattedTime}}</text>
+            <text class="item-reading-time" wx:if="{{item.readingTime}}">
+              阅读 {{item.formattedReadingTime}}
+            </text>
+          </view>
+          <text class="item-excerpt" wx:if="{{item.excerpt}}">{{item.excerpt}}</text>
+        </view>
+        <view class="item-indicator">
+          <text class="relative-time">{{item.relativeTime}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{historyList.length === 0}}">
+      <view class="empty-icon">📚</view>
+      <text class="empty-title">还没有阅读记录</text>
+      <text class="empty-subtitle">开始阅读文章，记录你的阅读足迹吧</text>
+    </view>
+  </view>
+
+  <!-- 收藏标签页 -->
+  <view class="tab-content" wx:if="{{activeTab === 'favorites' && !loading && !error}}">
+    <!-- 工具栏 -->
+    <view class="toolbar" wx:if="{{favoritesList.length > 0}}">
+      <view class="toolbar-info">
+        <text class="info-text">共 {{favoritesList.length}} 篇收藏</text>
+      </view>
+      <view class="toolbar-actions">
+        <button class="clear-btn" bindtap="onClearFavorites">清空</button>
+      </view>
+    </view>
+
+    <!-- 收藏列表 -->
+    <view class="favorites-list" wx:if="{{favoritesList.length > 0}}">
+      <view class="favorite-item entrance-animation" 
+            wx:for="{{favoritesList}}" wx:key="id"
+            data-slug="{{item.slug}}" data-id="{{item.id}}" 
+            bindtap="onPostTap">
+        <view class="item-content">
+          <view class="item-header">
+            <text class="item-title">{{item.title}}</text>
+            <view class="item-actions">
+              <button class="unfavorite-btn" 
+                      data-id="{{item.id}}" data-slug="{{item.slug}}"
+                      bindtap="onRemoveFavorite" catchtap="true">
+                取消收藏
+              </button>
+            </view>
+          </view>
+          <view class="item-meta">
+            <text class="item-category" wx:if="{{item.category}}">{{item.category}}</text>
+            <text class="item-time">收藏于 {{item.formattedTime}}</text>
+          </view>
+          <text class="item-excerpt" wx:if="{{item.excerpt}}">{{item.excerpt}}</text>
+        </view>
+        <view class="favorite-indicator">
+          <text class="favorite-icon">❤️</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{favoritesList.length === 0}}">
+      <view class="empty-icon">❤️</view>
+      <text class="empty-title">还没有收藏文章</text>
+      <text class="empty-subtitle">收藏喜欢的文章，方便随时回顾</text>
+    </view>
+  </view>
+
+  <!-- 统计标签页 -->
+  <view class="tab-content" wx:if="{{activeTab === 'stats' && !loading && !error}}">
+    <view class="stats-container">
+      <!-- 总体统计 -->
+      <view class="stats-section">
+        <text class="section-title">总体统计</text>
+        <view class="stats-grid">
+          <view class="stat-item">
+            <text class="stat-value">{{readingStats.totalArticles}}</text>
+            <text class="stat-label">阅读文章</text>
+          </view>
+          <view class="stat-item">
+            <text class="stat-value">{{readingStats.favoriteCount}}</text>
+            <text class="stat-label">收藏文章</text>
+          </view>
+          <view class="stat-item">
+            <text class="stat-value">{{readingStats.totalReadingTime}}</text>
+            <text class="stat-label">总阅读时长</text>
+          </view>
+          <view class="stat-item">
+            <text class="stat-value">{{readingStats.averageReadingTime}}</text>
+            <text class="stat-label">平均阅读时长</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 阅读习惯 -->
+      <view class="stats-section">
+        <text class="section-title">阅读习惯</text>
+        <view class="habit-stats">
+          <view class="habit-item">
+            <text class="habit-label">最长阅读时长</text>
+            <text class="habit-value">{{readingStats.longestSession}}</text>
+          </view>
+          <view class="habit-item" wx:if="{{readingStats.categoryStats}}">
+            <text class="habit-label">最常阅读分类</text>
+            <view class="category-stats">
+              <view class="category-item" 
+                    wx:for="{{readingStats.categoryStats}}" 
+                    wx:for-item="stat" wx:for-index="category" wx:key="category">
+                <text class="category-name">{{category}}</text>
+                <text class="category-count">{{stat.count}}篇</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 月度统计 -->
+      <view class="stats-section" wx:if="{{readingStats.monthlyStats}}">
+        <text class="section-title">月度统计</text>
+        <view class="monthly-stats">
+          <view class="month-item" 
+                wx:for="{{readingStats.monthlyStats}}" 
+                wx:for-item="stat" wx:for-index="month" wx:key="month">
+            <text class="month-name">{{month}}</text>
+            <view class="month-data">
+              <text class="month-count">{{stat.count}}篇</text>
+              <text class="month-time">{{stat.totalTime}}分钟</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

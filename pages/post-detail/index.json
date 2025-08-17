@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "文章详情",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "backgroundColor": "#ffffff",
+  "usingComponents": {
+    "artalk-comment": "/components/artalk-comment/index",
+    "towxml": "/towxml/towxml"
+  }
+}

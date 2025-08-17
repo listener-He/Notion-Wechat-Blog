@@ -1,0 +1,458 @@
+/**
+ * 墨语·Light & Ink 图标系统
+ * 基于语义化的图标规范
+ */
+
+/* ==================== 图标基础样式 ==================== */
+
+.icon {
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+  vertical-align: middle;
+  transition: all 0.3s ease;
+}
+
+/* ==================== 图标大小系统 ==================== */
+
+.icon-xs { font-size: 24rpx; }
+.icon-sm { font-size: 28rpx; }
+.icon-base { font-size: 32rpx; }
+.icon-md { font-size: 36rpx; }
+.icon-lg { font-size: 44rpx; }
+.icon-xl { font-size: 52rpx; }
+.icon-2xl { font-size: 64rpx; }
+.icon-3xl { font-size: 80rpx; }
+
+/* ==================== 图标颜色系统 ==================== */
+
+.icon-primary { color: var(--theme-primary, #2c3e50); }
+.icon-secondary { color: var(--theme-secondary, #95a5a6); }
+.icon-accent { color: var(--theme-accent, #e74c3c); }
+.icon-success { color: var(--theme-success, #27ae60); }
+.icon-warning { color: var(--theme-warning, #f39c12); }
+.icon-error { color: var(--theme-error, #e74c3c); }
+.icon-info { color: var(--theme-info, #3498db); }
+.icon-light { color: var(--theme-text-light, #7f8c8d); }
+.icon-muted { color: var(--theme-text-muted, #bdc3c7); }
+.icon-white { color: #ffffff; }
+
+/* ==================== 图标状态效果 ==================== */
+
+.icon-hover:hover {
+  color: var(--theme-accent);
+  transform: scale(1.1);
+}
+
+.icon-active:active {
+  transform: scale(0.95);
+}
+
+.icon-spin {
+  animation: icon-spin 1s linear infinite;
+}
+
+.icon-pulse {
+  animation: icon-pulse 2s ease-in-out infinite;
+}
+
+.icon-bounce {
+  animation: icon-bounce 1s ease-in-out infinite;
+}
+
+/* ==================== 图标组合样式 ==================== */
+
+.icon-with-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.icon-with-text .icon {
+  flex-shrink: 0;
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.icon-button:hover {
+  background: var(--theme-bg-light);
+}
+
+.icon-button:active {
+  transform: scale(0.95);
+}
+
+/* ==================== 常用图标定义 ==================== */
+
+/* 注意：微信小程序不支持伪元素选择器 ::before */
+/* 以下图标内容需要在组件中直接使用 */
+
+/* 导航图标 - 在组件中使用对应的 Unicode 字符或图标字体 */
+/* home: 🏠, search: 🔍, menu: ☰, close: ✕ */
+/* back: ←, forward: →, up: ↑, down: ↓, refresh: ↻ */
+
+/* 操作图标 */
+/* add: +, edit: ✎, delete: 🗑, save: 💾, copy: 📋 */
+/* share: 📤, download: ⬇, upload: ⬆, settings: ⚙, more: ⋯ */
+
+/* 状态图标 */
+/* check: ✓, error: ✗, warning: ⚠, info: ℹ */
+/* loading: ⟳, success: ✓ */
+
+/* 内容图标 */
+/* article: 📄, image: 🖼, video: 🎥, audio: 🎵, file: 📁 */
+/* link: 🔗, tag: 🏷, category: 📂, calendar: 📅, clock: 🕐 */
+
+/* 社交图标 */
+/* like: 👍, heart: ❤, star: ⭐, comment: 💬 */
+/* user: 👤, users: 👥, message: ✉, notification: 🔔 */
+
+/* 主题图标 */
+/* sun: ☀, moon: 🌙, theme: 🎨, palette: 🎭 */
+
+/* ==================== SVG 图标支持 ==================== */
+
+.icon-svg {
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+  vertical-align: middle;
+}
+
+/* ==================== 图标背景样式 ==================== */
+
+.icon-bg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: var(--theme-bg-light);
+}
+
+.icon-bg-primary {
+  background: var(--theme-primary);
+  color: white;
+}
+
+.icon-bg-accent {
+  background: var(--theme-accent);
+  color: white;
+}
+
+.icon-bg-success {
+  background: var(--theme-success);
+  color: white;
+}
+
+.icon-bg-warning {
+  background: var(--theme-warning);
+  color: white;
+}
+
+.icon-bg-error {
+  background: var(--theme-error);
+  color: white;
+}
+
+/* 方形背景 */
+.icon-bg-square {
+  border-radius: 12rpx;
+}
+
+.icon-bg-rounded {
+  border-radius: 16rpx;
+}
+
+/* ==================== 图标列表样式 ==================== */
+
+.icon-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.icon-list-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid var(--theme-border-light);
+}
+
+.icon-list-item:last-child {
+  border-bottom: none;
+}
+
+.icon-list-item .icon {
+  margin-right: 24rpx;
+  color: var(--theme-primary);
+}
+
+.icon-list-item .content {
+  flex: 1;
+}
+
+.icon-list-item .title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--theme-text-primary);
+  margin-bottom: 8rpx;
+}
+
+.icon-list-item .description {
+  font-size: var(--font-size-sm);
+  color: var(--theme-text-light);
+}
+
+/* ==================== 图标网格样式 ==================== */
+
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120rpx, 1fr));
+  gap: 30rpx;
+  padding: 30rpx;
+}
+
+.icon-grid-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 30rpx 20rpx;
+  border-radius: 16rpx;
+  background: white;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.icon-grid-item:hover {
+  transform: translateY(-4rpx);
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.12);
+}
+
+.icon-grid-item .icon {
+  font-size: 60rpx;
+  margin-bottom: 20rpx;
+  color: var(--theme-primary);
+}
+
+.icon-grid-item .label {
+  font-size: var(--font-size-sm);
+  color: var(--theme-text-secondary);
+}
+
+/* ==================== 特殊图标效果 ==================== */
+
+/* 呼吸效果 */
+.icon-breathe {
+  animation: icon-breathe 3s ease-in-out infinite;
+}
+
+/* 摇摆效果 */
+.icon-swing {
+  animation: icon-swing 2s ease-in-out infinite;
+}
+
+/* 闪烁效果 */
+.icon-blink {
+  animation: icon-blink 1.5s ease-in-out infinite;
+}
+
+/* 渐变色图标 */
+.icon-gradient {
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ==================== 图标徽章 ==================== */
+
+.icon-badge {
+  position: relative;
+  display: inline-block;
+}
+
+/* 注意：微信小程序不支持伪元素选择器 ::after */
+/* 徽章需要使用额外的view元素实现 */
+.icon-badge-dot {
+  position: absolute;
+  top: -6rpx;
+  right: -6rpx;
+  width: 16rpx;
+  height: 16rpx;
+  background: var(--theme-error);
+  border-radius: 50%;
+  border: 2rpx solid var(--theme-background);
+}
+
+/* 注意：微信小程序不支持伪元素选择器 ::after 和 attr() 函数 */
+/* 数字徽章需要使用额外的view元素和数据绑定实现 */
+.icon-badge-count {
+  position: absolute;
+  top: -12rpx;
+  right: -12rpx;
+  min-width: 32rpx;
+  height: 32rpx;
+  padding: 0 8rpx;
+  background: var(--theme-accent);
+  color: white;
+  font-size: 20rpx;
+  font-weight: 500;
+  line-height: 32rpx;
+  text-align: center;
+  border-radius: 16rpx;
+  border: 2rpx solid white;
+}
+
+/* ==================== 动画定义 ==================== */
+
+@keyframes icon-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes icon-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes icon-bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40%, 43% {
+    transform: translate3d(0, -30rpx, 0);
+  }
+  70% {
+    transform: translate3d(0, -15rpx, 0);
+  }
+  90% {
+    transform: translate3d(0, -4rpx, 0);
+  }
+}
+
+@keyframes icon-breathe {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+@keyframes icon-swing {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(15deg); }
+  40% { transform: rotate(-10deg); }
+  60% { transform: rotate(5deg); }
+  80% { transform: rotate(-5deg); }
+}
+
+@keyframes icon-blink {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0.3; }
+}
+
+/* ==================== 响应式图标 ==================== */
+
+@media (max-width: 750rpx) {
+  .icon-responsive {
+    font-size: var(--font-size-base);
+  }
+  
+  .icon-button {
+    width: 70rpx;
+    height: 70rpx;
+  }
+  
+  .icon-bg {
+    width: 70rpx;
+    height: 70rpx;
+  }
+}
+
+@media (min-width: 1200rpx) {
+  .icon-responsive {
+    font-size: var(--font-size-lg);
+  }
+  
+  .icon-button {
+    width: 90rpx;
+    height: 90rpx;
+  }
+  
+  .icon-bg {
+    width: 90rpx;
+    height: 90rpx;
+  }
+}
+
+/* ==================== 无障碍支持 ==================== */
+
+.icon[aria-hidden="true"] {
+  speak: none;
+}
+
+.icon-button[aria-label] {
+  position: relative;
+}
+
+/* 注意：微信小程序不支持伪元素选择器 ::after 和 attr() 函数 */
+/* 工具提示需要使用额外的view元素和hover事件实现 */
+.icon-tooltip {
+  position: absolute;
+  bottom: -50rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8rpx 16rpx;
+  background: var(--theme-text-primary);
+  color: white;
+  font-size: var(--font-size-xs);
+  border-radius: 8rpx;
+  white-space: nowrap;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.icon-button:hover .icon-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ==================== 图标工具类 ==================== */
+
+.icon-inline { vertical-align: baseline; }
+.icon-middle { vertical-align: middle; }
+.icon-top { vertical-align: top; }
+.icon-bottom { vertical-align: bottom; }
+
+.icon-left { margin-right: 12rpx; }
+.icon-right { margin-left: 12rpx; }
+
+.icon-clickable {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.icon-clickable:hover {
+  color: var(--theme-accent);
+  transform: scale(1.1);
+}
+
+.icon-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}

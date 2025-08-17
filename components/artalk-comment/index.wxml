@@ -1,0 +1,184 @@
+<!--components/artalk-comment/index.wxml-->
+<view wx:if="{{show}}" class="artalk-comment">
+  <!-- 评论标题栏 -->
+  <view class="comment-header">
+    <view class="comment-title">
+      <text class="title-icon">💬</text>
+      <text class="title-text">评论 ({{commentCount}})</text>
+    </view>
+    <view class="comment-actions">
+      <view class="action-btn" bindtap="refreshComments">
+        <text class="action-icon">🔄</text>
+        <text class="action-text">刷新</text>
+      </view>
+      <view class="action-btn primary" bindtap="showCommentForm">
+        <text class="action-icon">✍️</text>
+        <text class="action-text">写评论</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 评论表单 -->
+  <view wx:if="{{showCommentForm}}" class="comment-form">
+    <view class="form-header">
+      <text class="form-title">
+        {{replyToId ? '回复 @' + replyToName : '发表评论'}}
+      </text>
+      <view class="form-close" bindtap="hideCommentForm">
+        <text class="close-icon">✕</text>
+      </view>
+    </view>
+    
+    <view class="form-content">
+      <!-- 评论内容 -->
+      <view class="input-group">
+        <textarea 
+          class="comment-textarea"
+          placeholder="{{replyToId ? '写下你的回复...' : '写下你的评论...'}}"
+          value="{{commentContent}}"
+          bindinput="onInputChange"
+          data-field="commentContent"
+          maxlength="500"
+          auto-height
+        ></textarea>
+        <view class="textarea-counter">{{commentContent.length}}/500</view>
+      </view>
+      
+      <!-- 作者信息 -->
+      <view class="author-info">
+        <view class="input-row">
+          <input 
+            class="author-input"
+            placeholder="昵称 *"
+            value="{{authorName}}"
+            bindinput="onInputChange"
+            data-field="authorName"
+            maxlength="20"
+          />
+          <input 
+            class="author-input"
+            placeholder="邮箱"
+            value="{{authorEmail}}"
+            bindinput="onInputChange"
+            data-field="authorEmail"
+            maxlength="50"
+          />
+        </view>
+        <input 
+          class="author-input website"
+          placeholder="网站 (可选)"
+          value="{{authorWebsite}}"
+          bindinput="onInputChange"
+          data-field="authorWebsite"
+          maxlength="100"
+        />
+      </view>
+      
+      <!-- 提交按钮 -->
+      <view class="form-actions">
+        <button 
+          class="submit-btn {{submitting ? 'loading' : ''}}"
+          bindtap="submitComment"
+          disabled="{{submitting}}"
+        >
+          <text wx:if="{{submitting}}" class="loading-icon">⏳</text>
+          <text class="btn-text">{{submitting ? '提交中...' : '提交评论'}}</text>
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 评论列表 -->
+  <view class="comment-list">
+    <!-- 加载状态 -->
+    <view wx:if="{{loading && comments.length === 0}}" class="comment-loading">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">加载评论中...</text>
+    </view>
+    
+    <!-- 错误状态 -->
+    <view wx:elif="{{error}}" class="comment-error">
+      <text class="error-icon">⚠️</text>
+      <text class="error-text">{{error}}</text>
+      <button class="retry-btn" bindtap="refreshComments">重试</button>
+    </view>
+    
+    <!-- 空状态 -->
+    <view wx:elif="{{comments.length === 0}}" class="comment-empty">
+      <text class="empty-icon">💭</text>
+      <text class="empty-title">暂无评论</text>
+      <text class="empty-text">来发表第一条评论吧！</text>
+      <button class="empty-btn" bindtap="showCommentForm">写评论</button>
+    </view>
+    
+    <!-- 评论内容 -->
+    <view wx:else>
+      <view wx:for="{{comments}}" wx:key="id" class="comment-item">
+        <!-- 主评论 -->
+        <view class="comment-main">
+          <view class="comment-avatar">
+            <text class="avatar-emoji">{{item.author.avatar}}</text>
+          </view>
+          <view class="comment-content">
+            <view class="comment-meta">
+              <text class="author-name">{{item.author.name}}</text>
+              <text class="comment-time">{{formatTime(item.createdAt)}}</text>
+            </view>
+            <view class="comment-text">{{item.content}}</view>
+            <view class="comment-actions">
+              <view 
+                class="action-reply"
+                bindtap="replyToComment"
+                data-id="{{item.id}}"
+                data-name="{{item.author.name}}"
+              >
+                <text class="reply-icon">↩️</text>
+                <text class="reply-text">回复</text>
+              </view>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 回复列表 -->
+        <view wx:if="{{item.replies.length > 0}}" class="reply-list">
+          <view wx:for="{{item.replies}}" wx:for-item="reply" wx:key="id" class="reply-item">
+            <view class="reply-avatar">
+              <text class="avatar-emoji">{{reply.author.avatar}}</text>
+            </view>
+            <view class="reply-content">
+              <view class="reply-meta">
+                <text class="author-name">{{reply.author.name}}</text>
+                <text wx:if="{{reply.replyTo}}" class="reply-to">回复 @{{reply.replyTo}}</text>
+                <text class="reply-time">{{formatTime(reply.createdAt)}}</text>
+              </view>
+              <view class="reply-text">{{reply.content}}</view>
+              <view class="reply-actions">
+                <view 
+                  class="action-reply"
+                  bindtap="replyToComment"
+                  data-id="{{reply.id}}"
+                  data-name="{{reply.author.name}}"
+                >
+                  <text class="reply-icon">↩️</text>
+                  <text class="reply-text">回复</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 加载更多 -->
+      <view wx:if="{{hasMore}}" class="load-more">
+        <button 
+          class="load-more-btn {{loading ? 'loading' : ''}}"
+          bindtap="loadMoreComments"
+          disabled="{{loading}}"
+        >
+          <text wx:if="{{loading}}" class="loading-icon">⏳</text>
+          <text class="btn-text">{{loading ? '加载中...' : '加载更多'}}</text>
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

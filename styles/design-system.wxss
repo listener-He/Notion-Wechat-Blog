@@ -1,0 +1,508 @@
+/**
+ * 墨语·Light & Ink 设计系统
+ * 统一的视觉设计语言
+ * 
+ * 本文件整合了完整的设计系统，包括：
+ * - 色彩系统 (colors.wxss)
+ * - 字体系统 (typography.wxss) 
+ * - 图标系统 (icons.wxss)
+ * - 组件系统 (components.wxss)
+ */
+
+/* ==================== 导入设计系统模块 ==================== */
+
+@import './colors.wxss';
+@import './typography.wxss';
+@import './icons.wxss';
+@import './components.wxss';
+
+/* ==================== 全局重置样式 ==================== */
+
+/* 注意：微信小程序不支持通配符选择器 * */
+/* 全局样式通过具体组件类名实现 */
+view, text, button, input, textarea, image, scroll-view {
+  box-sizing: border-box;
+}
+
+page {
+  background-color: var(--theme-bg-primary, #ffffff);
+  color: var(--theme-text-primary, #2c3e50);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==================== 布局系统 ==================== */
+
+.container {
+  width: 100%;
+  max-width: 1200rpx;
+  margin: 0 auto;
+  padding: 0 30rpx;
+}
+
+.container-fluid {
+  width: 100%;
+  padding: 0 30rpx;
+}
+
+.container-narrow {
+  width: 100%;
+  max-width: 800rpx;
+  margin: 0 auto;
+  padding: 0 30rpx;
+}
+
+/* 网格系统 */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -15rpx;
+}
+
+.col {
+  flex: 1;
+  padding: 0 15rpx;
+}
+
+.col-1 { flex: 0 0 8.333333%; max-width: 8.333333%; }
+.col-2 { flex: 0 0 16.666667%; max-width: 16.666667%; }
+.col-3 { flex: 0 0 25%; max-width: 25%; }
+.col-4 { flex: 0 0 33.333333%; max-width: 33.333333%; }
+.col-5 { flex: 0 0 41.666667%; max-width: 41.666667%; }
+.col-6 { flex: 0 0 50%; max-width: 50%; }
+.col-7 { flex: 0 0 58.333333%; max-width: 58.333333%; }
+.col-8 { flex: 0 0 66.666667%; max-width: 66.666667%; }
+.col-9 { flex: 0 0 75%; max-width: 75%; }
+.col-10 { flex: 0 0 83.333333%; max-width: 83.333333%; }
+.col-11 { flex: 0 0 91.666667%; max-width: 91.666667%; }
+.col-12 { flex: 0 0 100%; max-width: 100%; }
+
+/* ==================== 间距系统 ==================== */
+
+.section {
+  padding: 80rpx 0;
+}
+
+.section-sm {
+  padding: 60rpx 0;
+}
+
+.section-lg {
+  padding: 120rpx 0;
+}
+
+/* 垂直间距 - 使用具体子元素选择器 */
+.space-y-1 > view + view { margin-top: 10rpx; }
+.space-y-2 > view + view { margin-top: 20rpx; }
+.space-y-3 > view + view { margin-top: 30rpx; }
+.space-y-4 > view + view { margin-top: 40rpx; }
+.space-y-5 > view + view { margin-top: 50rpx; }
+.space-y-6 > view + view { margin-top: 60rpx; }
+
+/* 水平间距 - 使用具体子元素选择器 */
+.space-x-1 > view + view { margin-left: 10rpx; }
+.space-x-2 > view + view { margin-left: 20rpx; }
+.space-x-3 > view + view { margin-left: 30rpx; }
+.space-x-4 > view + view { margin-left: 40rpx; }
+.space-x-5 > view + view { margin-left: 50rpx; }
+.space-x-6 > view + view { margin-left: 60rpx; }
+
+/* ==================== 主题切换系统 ==================== */
+
+.theme-transition {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* 主题切换动画 */
+@keyframes theme-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.theme-fade-in {
+  animation: theme-fade-in 0.5s ease-out;
+}
+
+/* ==================== 交互状态系统 ==================== */
+
+.interactive {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.interactive:hover {
+  transform: translateY(-2rpx);
+}
+
+.interactive:active {
+  transform: translateY(0);
+}
+
+/* 点击波纹效果 */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+/* 注意：微信小程序不支持伪元素选择器 ::before 和 ::after */
+/* 波纹效果需要通过JS动态创建元素实现 */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-effect {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  transform: scale(0);
+  animation: ripple-animation 0.6s linear;
+}
+
+@keyframes ripple-animation {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ==================== 加载状态系统 ==================== */
+
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 400% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+.skeleton-text {
+  height: 28rpx;
+  border-radius: 4rpx;
+  margin-bottom: 16rpx;
+}
+
+.skeleton-title {
+  height: 44rpx;
+  border-radius: 6rpx;
+  margin-bottom: 20rpx;
+  width: 60%;
+}
+
+.skeleton-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+}
+
+.skeleton-image {
+  width: 100%;
+  height: 300rpx;
+  border-radius: 12rpx;
+}
+
+/* ==================== 错误状态系统 ==================== */
+
+.error-boundary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400rpx;
+  padding: 60rpx 40rpx;
+  text-align: center;
+}
+
+.error-icon {
+  font-size: 120rpx;
+  color: var(--theme-error);
+  margin-bottom: 30rpx;
+}
+
+.error-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--theme-text-primary);
+  margin-bottom: 20rpx;
+}
+
+.error-message {
+  font-size: var(--font-size-base);
+  color: var(--theme-text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: 40rpx;
+}
+
+/* ==================== 成功状态系统 ==================== */
+
+.success-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx 40rpx;
+  text-align: center;
+}
+
+.success-icon {
+  font-size: 120rpx;
+  color: var(--theme-success);
+  margin-bottom: 30rpx;
+  animation: success-bounce 0.6s ease-out;
+}
+
+@keyframes success-bounce {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ==================== 响应式断点系统 ==================== */
+
+/* 注意：微信小程序不支持@media查询 */
+/* 响应式设计需要通过JS获取屏幕尺寸动态设置样式类 */
+/* 或使用rpx单位实现自适应 */
+
+/* 小屏幕适配样式类 */
+.small-screen .container {
+  padding: 0 20rpx;
+}
+
+.small-screen .section {
+  padding: 60rpx 0;
+}
+
+.hide-mobile {
+  display: none !important;
+}
+
+.show-mobile {
+  display: block !important;
+}
+
+/* 中等屏幕适配样式类 */
+.medium-screen .hide-tablet {
+  display: none !important;
+}
+
+.medium-screen .show-tablet {
+  display: block !important;
+}
+
+/* 大屏幕适配样式类 */
+.large-screen .container {
+  padding: 0 40rpx;
+}
+
+.large-screen .section {
+  padding: 100rpx 0;
+}
+
+.hide-desktop {
+  display: none !important;
+}
+
+.show-desktop {
+  display: block !important;
+}
+
+/* ==================== 滚动优化 ==================== */
+
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+.scroll-container {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 自定义滚动条 */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8rpx;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--theme-bg-light);
+  border-radius: 4rpx;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--theme-border);
+  border-radius: 4rpx;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-primary);
+}
+
+/* ==================== 无障碍支持 ==================== */
+
+.sr-only {
+  position: absolute;
+  width: 1rpx;
+  height: 1rpx;
+  padding: 0;
+  margin: -1rpx;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.focus-visible:focus {
+  outline: 2rpx solid var(--theme-primary);
+  outline-offset: 2rpx;
+}
+
+/* ==================== 打印样式 ==================== */
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-only {
+    display: block !important;
+  }
+  
+  page {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .card {
+    box-shadow: none !important;
+    border: 1rpx solid #ccc !important;
+  }
+}
+
+/* ==================== 工具类集合 ==================== */
+
+/* 定位 */
+.relative { position: relative; }
+.absolute { position: absolute; }
+.fixed { position: fixed; }
+.sticky { position: sticky; }
+
+/* 层级 */
+.z-0 { z-index: 0; }
+.z-10 { z-index: 10; }
+.z-20 { z-index: 20; }
+.z-30 { z-index: 30; }
+.z-40 { z-index: 40; }
+.z-50 { z-index: 50; }
+.z-auto { z-index: auto; }
+
+/* 溢出 */
+.overflow-auto { overflow: auto; }
+.overflow-hidden { overflow: hidden; }
+.overflow-visible { overflow: visible; }
+.overflow-scroll { overflow: scroll; }
+
+/* 宽高 */
+.w-full { width: 100%; }
+.w-auto { width: auto; }
+.h-full { height: 100%; }
+.h-auto { height: auto; }
+.h-screen { height: 100vh; }
+
+/* 最小/最大宽高 */
+.min-w-0 { min-width: 0; }
+.min-h-0 { min-height: 0; }
+.max-w-full { max-width: 100%; }
+.max-h-full { max-height: 100%; }
+
+/* 光标 */
+.cursor-auto { cursor: auto; }
+.cursor-default { cursor: default; }
+.cursor-pointer { cursor: pointer; }
+.cursor-wait { cursor: wait; }
+.cursor-text { cursor: text; }
+.cursor-move { cursor: move; }
+.cursor-not-allowed { cursor: not-allowed; }
+
+/* 用户选择 */
+.select-none { user-select: none; }
+.select-text { user-select: text; }
+.select-all { user-select: all; }
+.select-auto { user-select: auto; }
+
+/* ==================== 性能优化 ==================== */
+
+.will-change-auto { will-change: auto; }
+.will-change-scroll { will-change: scroll-position; }
+.will-change-contents { will-change: contents; }
+.will-change-transform { will-change: transform; }
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
+}
+
+/* ==================== 调试工具 ==================== */
+
+.debug-grid {
+  background-image: 
+    linear-gradient(rgba(255, 0, 0, 0.1) 1rpx, transparent 1rpx),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.1) 1rpx, transparent 1rpx);
+  background-size: 20rpx 20rpx;
+}
+
+/* 注意：微信小程序不支持通配符选择器 * */
+/* 调试轮廓需要为具体元素添加样式类 */
+.debug-outline view,
+.debug-outline text,
+.debug-outline button,
+.debug-outline input,
+.debug-outline textarea,
+.debug-outline image,
+.debug-outline scroll-view {
+  outline: 1rpx solid red !important;
+}
+
+/* ==================== 设计系统版本信息 ==================== */
+
+/*
+ * 墨语·Light & Ink 设计系统 v1.0.0
+ * 
+ * 特性：
+ * - 完整的色彩系统，支持主题切换和节日主题
+ * - 优雅的字体排版系统，针对中文阅读优化
+ * - 丰富的图标系统，支持多种状态和动画
+ * - 模块化的组件系统，易于维护和扩展
+ * - 响应式设计，适配多种屏幕尺寸
+ * - 无障碍支持，提升用户体验
+ * - 性能优化，确保流畅的交互体验
+ * 
+ * 使用方法：
+ * 1. 在 app.wxss 中导入本文件
+ * 2. 使用预定义的 CSS 类名
+ * 3. 通过 CSS 变量自定义主题
+ * 
+ * 维护者：墨语团队
+ * 更新时间：2024年
+ */

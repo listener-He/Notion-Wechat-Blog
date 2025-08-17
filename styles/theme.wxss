@@ -1,0 +1,300 @@
+/**
+ * 主题样式文件
+ * 定义CSS变量和主题相关样式
+ */
+
+/* 默认主题CSS变量 */
+page {
+  --color-primary: #FFFFFF;
+  --color-secondary: #F8F9FA;
+  --color-background: #FFFFFF;
+  --color-text-primary: #1F1F1F;
+  --color-text-secondary: #5A5A5A;
+  --color-text-hint: #8C8C8C;
+  --color-text-inverse: #FFFFFF;
+  --color-accent: #3A6EA5;
+  --color-accent-dark: #2E5A8A;
+  --color-primary-dark: #F0F0F0;
+  --color-hover: #E6F0FF;
+  --color-active: #D6E7FF;
+  --color-divider: #E8E8E8;
+  
+  --font-size-h1: 20px;
+  --font-size-h2: 18px;
+  --font-size-body: 16px;
+  --font-size-caption: 14px;
+  --font-size-label: 14px;
+  
+  --font-weight-h1: 600;
+  --font-weight-h2: 500;
+  --font-weight-body: 400;
+  --font-weight-caption: 400;
+  --font-weight-label: 500;
+  
+  --line-height-body: 1.8;
+  
+  --transition-duration: 300ms;
+  --transition-easing: ease-in-out;
+  
+  --border-radius: 12px;
+  --border-radius-small: 8px;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* 主题切换过渡动画 */
+.theme-transition {
+  transition: opacity var(--transition-duration) var(--transition-easing);
+}
+
+.theme-fade-out {
+  opacity: 0;
+}
+
+.theme-fade-in {
+  opacity: 1;
+}
+
+/* 基础组件样式 */
+.container {
+  background-color: var(--color-primary);
+  color: var(--color-text-primary);
+  transition: background-color var(--transition-duration) var(--transition-easing),
+              color var(--transition-duration) var(--transition-easing);
+}
+
+.card {
+  background-color: var(--color-secondary);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  transition: all var(--transition-duration) var(--transition-easing);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+
+/* 文字样式 */
+.text-h1 {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-h1);
+  color: var(--color-text-primary);
+  line-height: 1.4;
+}
+
+.text-h2 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-h2);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+}
+
+.text-body {
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-body);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-body);
+}
+
+.text-caption {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-caption);
+  color: var(--color-text-secondary);
+}
+
+.text-hint {
+  color: var(--color-text-hint);
+}
+
+.text-accent {
+  color: var(--color-accent);
+}
+
+/* 按钮样式 */
+.btn {
+  background-color: var(--color-accent);
+  color: var(--color-primary);
+  border-radius: var(--border-radius-small);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-label);
+  padding: 12px 24px;
+  border: none;
+  transition: all 150ms ease-in-out;
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+.btn-secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-divider);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+}
+
+/* 分割线 */
+.divider {
+  height: 1px;
+  background-color: var(--color-divider);
+  margin: 16px 0;
+}
+
+/* 标签样式 */
+.tag {
+  background-color: var(--color-hover);
+  color: var(--color-accent);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-label);
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: inline-block;
+  margin: 0 8px 8px 0;
+}
+
+/* 页面切换动画 */
+.page-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity var(--transition-duration) var(--transition-easing),
+              transform var(--transition-duration) var(--transition-easing);
+}
+
+/* 节日主题特殊样式 */
+.holiday-theme {
+  position: relative;
+}
+
+.holiday-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.1;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* 春节主题 */
+.theme-spring {
+  --color-primary: #FFF8F0;
+  --color-secondary: #FFF0E6;
+  --color-text-primary: #2D1810;
+  --color-text-secondary: #8B4513;
+  --color-text-hint: #CD853F;
+  --color-accent: #C41E3A;
+  --color-hover: #FFE4E1;
+  --color-divider: #DEB887;
+}
+
+/* 清明主题 */
+.theme-qingming {
+  --color-primary: #F5F5F5;
+  --color-secondary: #E8F5E8;
+  --color-text-primary: #2F4F4F;
+  --color-text-secondary: #696969;
+  --color-text-hint: #A9A9A9;
+  --color-accent: #8FBC8F;
+  --color-hover: #F0FFF0;
+  --color-divider: #D3D3D3;
+}
+
+/* 端午主题 */
+.theme-duanwu {
+  --color-primary: #F0FFF0;
+  --color-secondary: #E6FFE6;
+  --color-text-primary: #006400;
+  --color-text-secondary: #228B22;
+  --color-text-hint: #90EE90;
+  --color-accent: #8B4513;
+  --color-hover: #F5FFFA;
+  --color-divider: #98FB98;
+}
+
+/* 中秋主题 */
+.theme-midautumn {
+  --color-primary: #F0F8FF;
+  --color-secondary: #E6F3FF;
+  --color-text-primary: #000080;
+  --color-text-secondary: #4169E1;
+  --color-text-hint: #87CEEB;
+  --color-accent: #FFD700;
+  --color-hover: #F5F5FF;
+  --color-divider: #B0C4DE;
+}
+
+/* 国庆主题 */
+.theme-national {
+  --color-primary: #FFF5F5;
+  --color-secondary: #FFE4E1;
+  --color-text-primary: #8B0000;
+  --color-text-secondary: #DC143C;
+  --color-text-hint: #F08080;
+  --color-accent: #FFD700;
+  --color-hover: #FFEBCD;
+  --color-divider: #DDA0DD;
+}
+
+/* 冬至主题 */
+.theme-dongzhi {
+  --color-primary: #F0F8FF;
+  --color-secondary: #F5F5F5;
+  --color-text-primary: #2F4F4F;
+  --color-text-secondary: #708090;
+  --color-text-hint: #C0C0C0;
+  --color-accent: #4682B4;
+  --color-hover: #E6E6FA;
+  --color-divider: #D3D3D3;
+}
+
+/* 元旦主题 */
+.theme-newyear {
+  --color-primary: #F8F8FF;
+  --color-secondary: #E6E6FA;
+  --color-text-primary: #483D8B;
+  --color-text-secondary: #6A5ACD;
+  --color-text-hint: #9370DB;
+  --color-accent: #4169E1;
+  --color-hover: #F0F0FF;
+  --color-divider: #DDA0DD;
+}
+
+/* 响应式设计 */
+@media (max-width: 750rpx) {
+  .container {
+    padding: 0 32rpx;
+  }
+  
+  .card {
+    margin: 0 16rpx 16rpx 16rpx;
+  }
+}
+
+/* 注意：微信小程序不支持@media查询和:root伪类 */
+/* 深色模式需要通过JS动态切换样式类实现 */
+
+/* 深色模式样式类 */
+.dark-theme {
+  --color-primary: #1A1A1A;
+  --color-secondary: #2D2D2D;
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #B3B3B3;
+  --color-text-hint: #808080;
+  --color-accent: #5B9BD5;
+  --color-hover: #404040;
+  --color-divider: #404040;
+}

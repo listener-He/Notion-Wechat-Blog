@@ -1,0 +1,49 @@
+{
+  "pages": [
+    "pages/posts/index",
+    "pages/about/index",
+    "pages/post-detail/index",
+    "pages/search/index",
+    "pages/reading-history/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "明厚",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f8f9fa"
+  },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#3cc51f",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/posts/index",
+        "iconPath": "images/tab-posts.png",
+        "selectedIconPath": "images/tab-posts-active.png",
+        "text": "文章"
+      },
+      {
+        "pagePath": "pages/reading-history/index",
+        "iconPath": "images/tab-footprint.png",
+        "selectedIconPath": "images/tab-footprint-active.png",
+        "text": "足迹"
+      },
+      {
+        "pagePath": "pages/about/index",
+        "iconPath": "images/tab-about.png",
+        "selectedIconPath": "images/tab-about-active.png",
+        "text": "关于"
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 10000,
+    "downloadFile": 10000
+  },
+  "debug": false,
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

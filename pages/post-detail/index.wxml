@@ -1,0 +1,256 @@
+<!--pages/post-detail/index.wxml-->
+<view class="container theme-transition" style="opacity: {{themeOpacity}}">
+  <!-- 阅读过渡界面 -->
+  <view wx:if="{{showTransition}}" class="reading-transition">
+    <view class="transition-content">
+      <view class="transition-icon">📖</view>
+      <view class="transition-title">准备阅读</view>
+      <view wx:if="{{transitionQuote.content}}" class="transition-quote">
+        <view class="quote-text">{{transitionQuote.content}}</view>
+        <view wx:if="{{transitionQuote.author}}" class="quote-author">— {{transitionQuote.author}}</view>
+      </view>
+      <view class="transition-loading">
+        <view class="loading-dot"></view>
+        <view class="loading-dot"></view>
+        <view class="loading-dot"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 阅读进度条 -->
+  <view wx:if="{{!showTransition && readingProgress > 0}}" class="reading-progress">
+    <view class="progress-bar" style="width: {{readingProgress}}%"></view>
+  </view>
+
+  <!-- 阅读完成彩蛋弹框 -->
+  <view wx:if="{{showReadingComplete}}" class="reading-egg-modal" bindtap="hideReadingComplete">
+    <!-- 礼花背景动画 -->
+    <view class="fireworks-container">
+      <view class="firework firework-1"></view>
+      <view class="firework firework-2"></view>
+      <view class="firework firework-3"></view>
+      <view class="firework firework-4"></view>
+      <view class="firework firework-5"></view>
+      <view class="firework firework-6"></view>
+    </view>
+    
+    <!-- 彩蛋内容 -->
+    <view class="egg-content" catchtap="preventClose">
+      <!-- 倒计时圆环 -->
+      <view class="countdown-ring">
+        <view class="countdown-text">{{countdownSeconds}}</view>
+        <view class="countdown-progress" style="stroke-dasharray: {{countdownProgress}}, 283"></view>
+      </view>
+      
+      <!-- 彩蛋图标 -->
+      <view class="egg-icon">🎊</view>
+      
+      <!-- 彩蛋标题 -->
+      <view class="egg-title">阅读完成！</view>
+      
+      <!-- 彩蛋语句 -->
+      <view wx:if="{{completeQuote.content}}" class="egg-quote">
+        <view class="quote-content">{{completeQuote.content}}</view>
+        <view wx:if="{{completeQuote.author}}" class="quote-author">— {{completeQuote.author}}</view>
+      </view>
+      
+      <!-- 阅读统计 -->
+      <view wx:if="{{readingCompleteEgg}}" class="reading-stats">
+        <view class="stat-item">
+          <text class="stat-icon">⏱️</text>
+          <text class="stat-text">阅读时长 {{readingCompleteEgg.readingTime}}秒</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-icon">{{readingCompleteEgg.egg.emoji}}</text>
+          <text class="stat-text">{{readingCompleteEgg.egg.message}}</text>
+        </view>
+      </view>
+      
+      <!-- 关闭提示 -->
+      <view class="close-hint">{{countdownSeconds}}秒后自动关闭，或点击任意处关闭</view>
+    </view>
+  </view>
+  <!-- 文章头部背景 -->
+  <view wx:if="{{post && post.title}}" class="post-header">
+    <!-- 背景封面图 -->
+    <view class="header-bg">
+      <image 
+        wx:if="{{post.pageCover}}"
+        class="bg-cover" 
+        src="{{post.pageCover}}" 
+        mode="aspectFill"
+        lazy-load
+      />
+      <view wx:else class="default-bg"></view>
+      <view class="bg-overlay"></view>
+    </view>
+    
+    <!-- 头部内容 -->
+    <view class="header-content">
+      <!-- 文章图标 -->
+      <view wx:if="{{post.pageIcon}}" class="post-icon">{{post.pageIcon}}</view>
+      
+      <!-- 文章标题 -->
+      <view class="post-title">{{post.title}}</view>
+      
+      <!-- 文章摘要 -->
+      <view wx:if="{{post.summary}}" class="post-summary">{{post.summary}}</view>
+      
+      <!-- 文章标签 -->
+      <view wx:if="{{post.tags && post.tags.length > 0}}" class="post-tags">
+        <view 
+          wx:for="{{post.tags}}" 
+          wx:key="*this"
+          class="tag"
+          style="background-color: {{item.color || 'rgba(255,255,255,0.2)'}}"
+        >
+          {{item.name || item}}
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 文章元信息卡片 -->
+  <view wx:if="{{post && post.title}}" class="post-meta-card">
+    <view class="meta-row">
+      <view class="meta-item">
+        <text class="meta-icon">📅</text>
+        <view class="meta-content">
+          <text class="meta-label">发布时间</text>
+          <text class="meta-value">{{post.publishDate}}</text>
+        </view>
+      </view>
+      <view wx:if="{{post.lastEditedDate && post.lastEditedDate !== post.publishDate}}" class="meta-item">
+        <text class="meta-icon">✏️</text>
+        <view class="meta-content">
+          <text class="meta-label">最后编辑</text>
+          <text class="meta-value">{{post.lastEditedDate}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="meta-row">
+      <view wx:if="{{post.category}}" class="meta-item">
+        <text class="meta-icon">📂</text>
+        <view class="meta-content">
+          <text class="meta-label">分类</text>
+          <text class="meta-value">{{post.category}}</text>
+        </view>
+      </view>
+      <view wx:if="{{post.wordCount}}" class="meta-item">
+        <text class="meta-icon">📊</text>
+        <view class="meta-content">
+          <text class="meta-label">字数统计</text>
+          <text class="meta-value">{{post.wordCount}} 字</text>
+        </view>
+      </view>
+    </view>
+    
+    <view wx:if="{{post.readingTime}}" class="meta-row">
+      <view class="meta-item full-width">
+        <text class="meta-icon">⏱️</text>
+        <view class="meta-content">
+          <text class="meta-label">预计阅读时间</text>
+          <text class="meta-value">{{post.readingTime}} 分钟</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 文章内容 -->
+  <towxml wx:if="{{parsedContent}}" nodes="{{parsedContent}}" class="post-content-full" />
+  <rich-text wx:elif="{{post.content}}" nodes="{{post.content}}" class="post-content-full" />
+  <view wx:else class="no-content">暂无内容</view>
+  
+  <!-- 版权信息 -->
+  <view wx:if="{{post && post.title}}" class="copyright">
+    <view class="copyright-title">📄 版权声明</view>
+    <view class="copyright-content">
+      <view class="copyright-item">
+        <text class="copyright-label">本文作者：</text>
+        <text class="copyright-value">{{post.author || '博主'}}</text>
+      </view>
+      <view class="copyright-item">
+        <text class="copyright-label">本文链接：</text>
+        <text class="copyright-value">{{post.url || ''}}</text>
+      </view>
+      <view class="copyright-item">
+        <text class="copyright-label">版权声明：</text>
+        <text class="copyright-value">本博客所有文章除特别声明外，均采用 CC BY-NC-SA 4.0 许可协议。转载请注明出处！</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 相关文章 -->
+  <view wx:if="{{relatedPosts && relatedPosts.length > 0}}" class="related-posts">
+    <view class="section-title">📖 相关文章</view>
+    <view class="related-list">
+      <view 
+        wx:for="{{relatedPosts}}" 
+        wx:key="id"
+        class="related-item"
+        bindtap="onRelatedPostTap"
+        data-slug="{{item.slug}}"
+        data-id="{{item.id}}"
+      >
+        <image 
+          wx:if="{{item.pageCoverThumbnail}}"
+          class="related-cover" 
+          src="{{item.pageCoverThumbnail}}" 
+          mode="aspectFill"
+          lazy-load
+        />
+        <view class="related-info">
+          <view class="related-title">{{item.title}}</view>
+          <view class="related-date">{{item.publishDate}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading">
+    <view class="loading-spinner"></view>
+    <view class="loading-text">加载中...</view>
+  </view>
+  
+  <!-- 错误状态 -->
+  <view wx:if="{{error}}" class="error">
+    <view class="error-icon">😕</view>
+    <view class="error-text">{{error}}</view>
+    <button class="btn btn-primary" bindtap="retry">重试</button>
+  </view>
+  
+  <!-- 空状态 -->
+  <view wx:if="{{!loading && !error && !post}}" class="empty">
+    <view class="empty-icon">📄</view>
+    <view class="empty-text">文章不存在</view>
+    <button class="btn btn-secondary" bindtap="goBack">返回</button>
+  </view>
+  
+  <!-- 评论区域 -->
+  <artalk-comment 
+    wx:if="{{post && post.title}}" 
+    page-key="{{post.slug || post.id}}" 
+    page-title="{{post.title}}"
+    show="{{true}}"
+  ></artalk-comment>
+</view>
+
+<!-- 底部操作栏 -->
+<view wx:if="{{post && post.title}}" class="bottom-actions">
+  <button class="action-btn btn-hover btn-ripple" bindtap="goBack">
+    <text class="action-icon">⬅️</text>
+    <text class="action-text">返回</text>
+  </button>
+  
+  <button class="action-btn btn-hover btn-ripple" open-type="share">
+    <text class="action-icon">📤</text>
+    <text class="action-text">分享</text>
+  </button>
+  
+  <button class="action-btn btn-hover btn-ripple {{isFavorite ? 'like-heart' : ''}}" bindtap="toggleFavorite">
+    <text class="action-icon">{{isFavorite ? '❤️' : '🤍'}}</text>
+    <text class="action-text">{{isFavorite ? '已收藏' : '收藏'}}</text>
+  </button>
+</view>

@@ -1,0 +1,179 @@
+<!--pages/about/index.wxml-->
+<view class="container">
+  <!-- 作者信息卡片 -->
+  <view class="card author-card">
+    <view class="author-header">
+      <image 
+        class="author-avatar" 
+        src="{{siteInfo.avatar || '/images/default-avatar.png'}}" 
+        mode="aspectFill"
+      />
+      <view class="author-info">
+        <view class="author-name">{{siteInfo.author || '博主'}}</view>
+        <view class="author-description">
+          {{siteInfo.description || '这是一个由NotionNext生成的博客'}}
+        </view>
+        <view class="author-mbti">
+          <text class="mbti-label">MBTI:</text>
+          <text class="mbti-type">INFJ</text>
+          <text class="mbti-desc">提倡者型人格</text>
+        </view>
+      </view>
+    </view>
+    <scroll-view class="infj-traits" scroll-x="true" show-scrollbar="false">
+      <view class="traits-container">
+        <view class="trait-item">🎯 理想主义者</view>
+        <view class="trait-item">💡 富有创造力</view>
+        <view class="trait-item">🤝 善于理解他人</view>
+        <view class="trait-item">📚 热爱学习成长</view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 统计信息 -->
+  <view class="stats-section">
+    <view class="stats-header">
+      <text class="section-title">📊 博客统计</text>
+      <text class="last-update-text">  {{statistics.formattedLatestPostDate}}</text>
+    </view>
+    <view class="stats-grid">
+      <view class="stat-card">
+        <view class="stat-number">{{statistics.postCount || 0}}</view>
+        <view class="stat-label">文章数</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-number">{{statistics.categoryCount || 0}}</view>
+        <view class="stat-label">分类数</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-number">{{statistics.tagCount || 0}}</view>
+        <view class="stat-label">标签数</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-number">{{formattedSiteDays}}</view>
+        <view class="stat-label">建站天数</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 最新文章 -->
+  <view wx:if="{{latestPosts.length > 0}}" class="latest-posts-section">
+    <view class="section-title">📝 最新文章</view>
+    <view class="latest-posts">
+      <view 
+        wx:for="{{latestPosts}}" 
+        wx:key="id"
+        class="latest-post-item"
+        bindtap="onPostTap"
+        data-slug="{{item.slug}}"
+        data-id="{{item.id}}"
+      >
+        <image 
+          wx:if="{{item.pageCoverThumbnail}}"
+          class="latest-post-cover" 
+          src="{{item.pageCoverThumbnail}}" 
+          mode="aspectFill"
+          lazy-load
+        />
+        <view class="latest-post-info">
+          <view class="latest-post-title">{{item.title}}</view>
+          <view class="latest-post-date">{{item.formattedDate}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 社交联系 -->
+  <view class="social-section">
+    <view class="section-title">🔗 联系方式</view>
+    <view class="social-links">
+      <!-- GitHub -->
+      <view class="social-link" bindtap="onSocialTap" data-type="github" data-value="hehouhui">
+        <text class="social-icon">🐙</text>
+        <text class="social-text">GitHub</text>
+      </view>
+      <!-- 微信公众号 -->
+      <view class="social-link" bindtap="onSocialTap" data-type="wechat_mp" data-value="hehouhui">
+        <text class="social-icon">📱</text>
+        <text class="social-text">微信公众号</text>
+      </view>
+      <!-- 邮箱 -->
+      <view class="social-link" bindtap="onSocialTap" data-type="email" data-value="hehouhui@gmail.com">
+        <text class="social-icon">📧</text>
+        <text class="social-text">邮箱</text>
+      </view>
+      <!-- 知乎 -->
+      <view class="social-link" bindtap="onSocialTap" data-type="zhihu" data-value="https://www.zhihu.com/people/hehouhui">
+        <text class="social-icon">🔵</text>
+        <text class="social-text">知乎</text>
+      </view>
+      <!-- 掘金 -->
+      <view class="social-link" bindtap="onSocialTap" data-type="juejin" data-value="https://juejin.cn/user/hehouhui">
+        <text class="social-icon">💎</text>
+        <text class="social-text">掘金</text>
+      </view>
+      <!-- B站 -->
+      <view class="social-link" bindtap="onSocialTap" data-type="bilibili" data-value="https://space.bilibili.com/hehouhui">
+        <text class="social-icon">📺</text>
+        <text class="social-text">B站</text>
+      </view>
+      <!-- 动态社交链接 -->
+      <view 
+        wx:for="{{socialLinksArray}}" 
+        wx:key="type"
+        class="social-link"
+        bindtap="onSocialTap"
+        data-type="{{item.type}}"
+        data-value="{{item.value}}"
+      >
+        <text class="social-icon">{{item.icon}}</text>
+        <text class="social-text">{{item.label}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 联系客服 -->
+  <view class="contact-section">
+    <view class="section-title">💬 联系客服</view>
+    <button 
+      class="contact-btn"
+      open-type="contact"
+      bindcontact="onContactTap"
+      session-from="miniprogram"
+    >
+      <text class="contact-icon">💬</text>
+      <text class="contact-text">联系客服</text>
+    </button>
+  </view>
+
+  <!-- 关于博客 -->
+  <view class="about-section">
+    <view class="section-title">ℹ️ 关于博客</view>
+    <view class="about-content">
+      <view class="about-item">
+        <text class="about-label">博客地址：</text>
+        <text class="about-value" bindtap="onLinkTap" data-url="{{siteInfo.link}}">{{siteInfo.link}}</text>
+      </view>
+      <view class="about-item">
+        <text class="about-label">建站时间：</text>
+        <text class="about-value">{{statistics.formattedFirstPostDate}}</text>
+      </view>
+      <view class="about-item">
+        <text class="about-label">技术栈：</text>
+        <text class="about-value">NotionNext + 微信小程序</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading">
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <!-- 错误状态 -->
+  <view wx:if="{{error}}" class="error">
+    <view class="error-icon">😕</view>
+    <view class="error-text">{{error}}</view>
+    <button class="btn btn-primary" bindtap="retry">重试</button>
+  </view>
+</view>

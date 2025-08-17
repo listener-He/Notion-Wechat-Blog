@@ -1,0 +1,301 @@
+/**
+ * 墨语·Light & Ink 色彩系统
+ * 基于品牌理念的色彩规范
+ */
+
+/* ==================== 主题色彩变量 ==================== */
+
+:root {
+  /* 主色调 - 素墨系列 */
+  --theme-primary: #2c3e50;          /* 深墨蓝 */
+  --theme-primary-light: #34495e;    /* 浅墨蓝 */
+  --theme-primary-lighter: #5d6d7e;  /* 更浅墨蓝 */
+  --theme-primary-dark: #1b2631;     /* 深墨黑 */
+  
+  /* 辅助色调 */
+  --theme-secondary: #95a5a6;        /* 银灰 */
+  --theme-accent: #e74c3c;           /* 朱砂红 */
+  --theme-accent-light: #ec7063;     /* 浅朱砂 */
+  
+  /* 背景色系 */
+  --theme-bg-primary: #ffffff;       /* 纯白 */
+  --theme-bg-secondary: #f8f9fa;     /* 雪白 */
+  --theme-bg-light: #ecf0f1;         /* 浅灰 */
+  --theme-bg-dark: #2c3e50;          /* 深色背景 */
+  
+  /* 文字色系 */
+  --theme-text-primary: #2c3e50;     /* 主文字 */
+  --theme-text-secondary: #34495e;   /* 次要文字 */
+  --theme-text-light: #7f8c8d;       /* 浅色文字 */
+  --theme-text-muted: #bdc3c7;       /* 静音文字 */
+  --theme-text-white: #ffffff;       /* 白色文字 */
+  
+  /* 边框色系 */
+  --theme-border-light: #ecf0f1;     /* 浅边框 */
+  --theme-border: #bdc3c7;           /* 标准边框 */
+  --theme-border-dark: #95a5a6;      /* 深边框 */
+  
+  /* 状态色系 */
+  --theme-success: #27ae60;          /* 成功绿 */
+  --theme-success-light: #58d68d;    /* 浅成功绿 */
+  --theme-warning: #f39c12;          /* 警告橙 */
+  --theme-warning-light: #f7dc6f;    /* 浅警告橙 */
+  --theme-error: #e74c3c;            /* 错误红 */
+  --theme-error-light: #ec7063;      /* 浅错误红 */
+  --theme-info: #3498db;             /* 信息蓝 */
+  --theme-info-light: #5dade2;       /* 浅信息蓝 */
+  
+  /* 阴影色系 */
+  --theme-shadow-light: rgba(44, 62, 80, 0.1);   /* 浅阴影 */
+  --theme-shadow: rgba(44, 62, 80, 0.15);        /* 标准阴影 */
+  --theme-shadow-dark: rgba(44, 62, 80, 0.25);   /* 深阴影 */
+  
+  /* 遮罩色系 */
+  --theme-overlay-light: rgba(0, 0, 0, 0.3);     /* 浅遮罩 */
+  --theme-overlay: rgba(0, 0, 0, 0.5);           /* 标准遮罩 */
+  --theme-overlay-dark: rgba(0, 0, 0, 0.7);      /* 深遮罩 */
+}
+
+/* ==================== 节日主题色彩 ==================== */
+
+/* 春节主题 */
+.theme-spring-festival {
+  --theme-primary: #c0392b;          /* 中国红 */
+  --theme-primary-light: #e74c3c;    /* 浅中国红 */
+  --theme-accent: #f39c12;           /* 金黄 */
+  --theme-accent-light: #f7dc6f;     /* 浅金黄 */
+  --theme-bg-light: #fdf2e9;         /* 暖白 */
+}
+
+/* 情人节主题 */
+.theme-valentine {
+  --theme-primary: #ad1457;          /* 玫瑰红 */
+  --theme-primary-light: #e91e63;    /* 浅玫瑰红 */
+  --theme-accent: #f06292;           /* 粉红 */
+  --theme-accent-light: #f8bbd9;     /* 浅粉红 */
+  --theme-bg-light: #fce4ec;         /* 粉白 */
+}
+
+/* 清明节主题 */
+.theme-qingming {
+  --theme-primary: #2e7d32;          /* 青绿 */
+  --theme-primary-light: #4caf50;    /* 浅青绿 */
+  --theme-accent: #66bb6a;           /* 嫩绿 */
+  --theme-accent-light: #a5d6a7;     /* 浅嫩绿 */
+  --theme-bg-light: #e8f5e8;         /* 青白 */
+}
+
+/* 端午节主题 */
+.theme-dragon-boat {
+  --theme-primary: #1565c0;          /* 龙舟蓝 */
+  --theme-primary-light: #1976d2;    /* 浅龙舟蓝 */
+  --theme-accent: #4fc3f7;           /* 水蓝 */
+  --theme-accent-light: #81d4fa;     /* 浅水蓝 */
+  --theme-bg-light: #e3f2fd;         /* 水白 */
+}
+
+/* 中秋节主题 */
+.theme-mid-autumn {
+  --theme-primary: #ef6c00;          /* 月橙 */
+  --theme-primary-light: #ff9800;    /* 浅月橙 */
+  --theme-accent: #ffb74d;           /* 金橙 */
+  --theme-accent-light: #ffcc02;     /* 浅金橙 */
+  --theme-bg-light: #fff8e1;         /* 月白 */
+}
+
+/* 国庆节主题 */
+.theme-national-day {
+  --theme-primary: #d32f2f;          /* 国旗红 */
+  --theme-primary-light: #f44336;    /* 浅国旗红 */
+  --theme-accent: #ffc107;           /* 国旗黄 */
+  --theme-accent-light: #ffeb3b;     /* 浅国旗黄 */
+  --theme-bg-light: #ffebee;         /* 红白 */
+}
+
+/* 万圣节主题 */
+.theme-halloween {
+  --theme-primary: #e65100;          /* 南瓜橙 */
+  --theme-primary-light: #ff9800;    /* 浅南瓜橙 */
+  --theme-accent: #424242;           /* 暗黑 */
+  --theme-accent-light: #757575;     /* 浅暗黑 */
+  --theme-bg-light: #fff3e0;         /* 橙白 */
+}
+
+/* 圣诞节主题 */
+.theme-christmas {
+  --theme-primary: #c62828;          /* 圣诞红 */
+  --theme-primary-light: #e53935;    /* 浅圣诞红 */
+  --theme-accent: #2e7d32;           /* 圣诞绿 */
+  --theme-accent-light: #4caf50;     /* 浅圣诞绿 */
+  --theme-bg-light: #ffebee;         /* 圣诞白 */
+}
+
+/* ==================== 深色模式色彩 ==================== */
+
+.theme-dark {
+  --theme-bg-primary: #1a1a1a;       /* 深黑 */
+  --theme-bg-secondary: #2d2d2d;     /* 次深黑 */
+  --theme-bg-light: #3d3d3d;         /* 浅深黑 */
+  --theme-bg-dark: #0d0d0d;          /* 极深黑 */
+  
+  --theme-text-primary: #ffffff;     /* 白色文字 */
+  --theme-text-secondary: #e0e0e0;   /* 浅白文字 */
+  --theme-text-light: #b0b0b0;       /* 灰白文字 */
+  --theme-text-muted: #808080;       /* 静音灰白 */
+  
+  --theme-border-light: #404040;     /* 深浅边框 */
+  --theme-border: #606060;           /* 深标准边框 */
+  --theme-border-dark: #808080;      /* 深深边框 */
+  
+  --theme-shadow-light: rgba(0, 0, 0, 0.3);   /* 深浅阴影 */
+  --theme-shadow: rgba(0, 0, 0, 0.5);         /* 深标准阴影 */
+  --theme-shadow-dark: rgba(0, 0, 0, 0.7);    /* 深深阴影 */
+}
+
+/* ==================== 语义化色彩类 ==================== */
+
+/* 背景色类 */
+.bg-primary { background-color: var(--theme-primary); }
+.bg-secondary { background-color: var(--theme-secondary); }
+.bg-accent { background-color: var(--theme-accent); }
+.bg-white { background-color: var(--theme-bg-primary); }
+.bg-light { background-color: var(--theme-bg-light); }
+.bg-dark { background-color: var(--theme-bg-dark); }
+
+.bg-success { background-color: var(--theme-success); }
+.bg-warning { background-color: var(--theme-warning); }
+.bg-error { background-color: var(--theme-error); }
+.bg-info { background-color: var(--theme-info); }
+
+/* 文字色类 */
+.text-primary { color: var(--theme-text-primary); }
+.text-secondary { color: var(--theme-text-secondary); }
+.text-light { color: var(--theme-text-light); }
+.text-muted { color: var(--theme-text-muted); }
+.text-white { color: var(--theme-text-white); }
+
+.text-success { color: var(--theme-success); }
+.text-warning { color: var(--theme-warning); }
+.text-error { color: var(--theme-error); }
+.text-info { color: var(--theme-info); }
+
+/* 边框色类 */
+.border-light { border-color: var(--theme-border-light); }
+.border { border-color: var(--theme-border); }
+.border-dark { border-color: var(--theme-border-dark); }
+.border-primary { border-color: var(--theme-primary); }
+.border-accent { border-color: var(--theme-accent); }
+
+/* ==================== 渐变色系 ==================== */
+
+.gradient-primary {
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary-light) 100%);
+}
+
+.gradient-accent {
+  background: linear-gradient(135deg, var(--theme-accent) 0%, var(--theme-accent-light) 100%);
+}
+
+.gradient-success {
+  background: linear-gradient(135deg, var(--theme-success) 0%, var(--theme-success-light) 100%);
+}
+
+.gradient-info {
+  background: linear-gradient(135deg, var(--theme-info) 0%, var(--theme-info-light) 100%);
+}
+
+.gradient-warm {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+}
+
+.gradient-cool {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
+
+.gradient-sunset {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+}
+
+.gradient-ocean {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* ==================== 透明度变体 ==================== */
+
+.bg-primary-10 { background-color: rgba(44, 62, 80, 0.1); }
+.bg-primary-20 { background-color: rgba(44, 62, 80, 0.2); }
+.bg-primary-30 { background-color: rgba(44, 62, 80, 0.3); }
+.bg-primary-50 { background-color: rgba(44, 62, 80, 0.5); }
+.bg-primary-70 { background-color: rgba(44, 62, 80, 0.7); }
+.bg-primary-90 { background-color: rgba(44, 62, 80, 0.9); }
+
+.bg-accent-10 { background-color: rgba(231, 76, 60, 0.1); }
+.bg-accent-20 { background-color: rgba(231, 76, 60, 0.2); }
+.bg-accent-30 { background-color: rgba(231, 76, 60, 0.3); }
+.bg-accent-50 { background-color: rgba(231, 76, 60, 0.5); }
+.bg-accent-70 { background-color: rgba(231, 76, 60, 0.7); }
+.bg-accent-90 { background-color: rgba(231, 76, 60, 0.9); }
+
+.bg-success-10 { background-color: rgba(39, 174, 96, 0.1); }
+.bg-success-20 { background-color: rgba(39, 174, 96, 0.2); }
+.bg-success-30 { background-color: rgba(39, 174, 96, 0.3); }
+.bg-success-50 { background-color: rgba(39, 174, 96, 0.5); }
+.bg-success-70 { background-color: rgba(39, 174, 96, 0.7); }
+.bg-success-90 { background-color: rgba(39, 174, 96, 0.9); }
+
+/* ==================== 色彩工具函数 ==================== */
+
+/* 悬停效果 */
+.hover-primary:hover { background-color: var(--theme-primary-light); }
+.hover-accent:hover { background-color: var(--theme-accent-light); }
+.hover-success:hover { background-color: var(--theme-success-light); }
+.hover-light:hover { background-color: var(--theme-bg-light); }
+
+/* 激活效果 */
+.active-primary:active { background-color: var(--theme-primary-dark); }
+.active-accent:active { background-color: var(--theme-accent); }
+.active-light:active { background-color: var(--theme-border); }
+
+/* 焦点效果 */
+.focus-primary:focus {
+  box-shadow: 0 0 0 4rpx rgba(44, 62, 80, 0.2);
+}
+
+.focus-accent:focus {
+  box-shadow: 0 0 0 4rpx rgba(231, 76, 60, 0.2);
+}
+
+.focus-success:focus {
+  box-shadow: 0 0 0 4rpx rgba(39, 174, 96, 0.2);
+}
+
+/* ==================== 色彩辅助类 ==================== */
+
+/* 禁用状态 */
+.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* 选中状态 */
+.selected {
+  background-color: var(--theme-primary);
+  color: var(--theme-text-white);
+}
+
+/* 高亮状态 */
+.highlighted {
+  background-color: var(--theme-accent-light);
+  color: var(--theme-text-primary);
+}
+
+/* 静音状态 */
+.muted {
+  opacity: 0.7;
+}
+
+/* 强调状态 */
+.emphasized {
+  font-weight: 600;
+  color: var(--theme-primary);
+}

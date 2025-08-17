@@ -1,0 +1,42 @@
+{
+  "name": "notion-wechat-blog",
+  "version": "1.0.0",
+  "description": "基于 NotionNext 博客系统的微信小程序版本",
+  "main": "app.js",
+  "scripts": {
+    "dev": "微信开发者工具打开项目进行开发",
+    "build": "微信开发者工具构建小程序代码包",
+    "preview": "微信开发者工具预览小程序",
+    "upload": "微信开发者工具上传代码",
+    "lint": "eslint . --ext .js",
+    "format": "prettier --write ."
+  },
+  "keywords": [
+    "wechat",
+    "miniprogram",
+    "blog",
+    "notion",
+    "notionnext"
+  ],
+  "author": "NotionNext Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tangly1024/NotionNext"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.25.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "prettier": "^2.8.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.28.3",
+    "marked": "^16.1.2"
+  }
+}

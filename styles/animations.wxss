@@ -1,0 +1,534 @@
+/* styles/animations.wxss */
+/* 动画效果样式库 */
+
+/* ==================== 基础动画 ==================== */
+
+/* 淡入淡出 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* 缩放动画 */
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* 弹跳缩放 */
+@keyframes bounceScale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 滑动动画 */
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ==================== 按钮动画 ==================== */
+
+/* 按钮点击效果 */
+.btn-click {
+  animation: btnClick 0.15s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes btnClick {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 按钮悬浮效果 */
+.btn-hover {
+  transition: all 0.3s ease;
+}
+
+.btn-hover:hover {
+  transform: translateY(-2rpx);
+  box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.15);
+}
+
+/* 波纹效果 */
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+/* 注意：微信小程序不支持伪元素选择器 ::after */
+/* 波纹效果需要通过JS动态创建元素实现 */
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-ripple-effect {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  transform: translate(-50%, -50%);
+  transition: all 0.6s;
+  pointer-events: none;
+}
+
+.btn-ripple-active .btn-ripple-effect {
+  width: 300rpx;
+  height: 300rpx;
+}
+
+/* ==================== 点赞动画 ==================== */
+
+/* 心形点赞动画 */
+.like-heart {
+  animation: likeHeart 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes likeHeart {
+  0% {
+    transform: scale(1);
+  }
+  15% {
+    transform: scale(1.2);
+  }
+  30% {
+    transform: scale(0.95);
+  }
+  45% {
+    transform: scale(1.1);
+  }
+  80% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 浮动点赞效果 */
+.like-float {
+  animation: likeFloat 1.2s ease-out;
+}
+
+@keyframes likeFloat {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-60rpx) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* 点赞粒子效果 */
+.like-particles {
+  position: relative;
+}
+
+/* 注意：微信小程序不支持伪元素选择器 ::before 和 ::after */
+/* 点赞粒子效果需要通过JS动态创建元素实现 */
+.like-particle {
+  position: absolute;
+  font-size: 24rpx;
+  animation: particleFloat 1s ease-out;
+  pointer-events: none;
+}
+
+.like-particle.particle-1 {
+  top: -20rpx;
+  left: -20rpx;
+  animation-delay: 0.1s;
+}
+
+.like-particle.particle-2 {
+  top: -20rpx;
+  right: -20rpx;
+  animation-delay: 0.3s;
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-80rpx) rotate(180deg);
+    opacity: 0;
+  }
+}
+
+/* ==================== 加载动画 ==================== */
+
+/* 旋转加载 */
+.loading-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 脉冲加载 */
+.loading-pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.05);
+  }
+}
+
+/* 弹跳加载 */
+.loading-bounce {
+  animation: bounce 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20rpx);
+  }
+}
+
+/* 点状加载 */
+.loading-dots {
+  display: flex;
+  gap: 8rpx;
+}
+
+/* 注意：微信小程序不支持伪元素选择器 ::before 和 ::after */
+/* 加载点动画需要使用多个view元素实现 */
+.loading-dots {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.loading-dot {
+  display: inline-block;
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: var(--theme-primary, #2c3e50);
+  animation: dotBounce 1.4s ease-in-out infinite both;
+}
+
+.loading-dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.loading-dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+.loading-dot:nth-child(3) {
+  animation-delay: 0s;
+}
+
+@keyframes dotBounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+/* ==================== 页面切换动画 ==================== */
+
+/* 页面淡入 */
+.page-fade-in {
+  animation: pageSlideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes pageSlideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* 页面滑出 */
+.page-slide-out {
+  animation: pageSlideOut 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes pageSlideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+/* ==================== 节日动效 ==================== */
+
+/* 雪花飘落 */
+.snow-fall {
+  animation: snowFall 3s linear infinite;
+}
+
+@keyframes snowFall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* 樱花飘落 */
+.sakura-fall {
+  animation: sakuraFall 4s ease-in-out infinite;
+}
+
+@keyframes sakuraFall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg) translateX(0);
+    opacity: 1;
+  }
+  25% {
+    transform: translateY(-50vh) rotate(90deg) translateX(20rpx);
+  }
+  50% {
+    transform: translateY(0) rotate(180deg) translateX(-20rpx);
+  }
+  75% {
+    transform: translateY(50vh) rotate(270deg) translateX(20rpx);
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg) translateX(0);
+    opacity: 0;
+  }
+}
+
+/* 烟花效果 */
+.fireworks {
+  animation: fireworks 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes fireworks {
+  0% {
+    transform: scale(0) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2) rotate(180deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* ==================== 特殊效果 ==================== */
+
+/* 闪烁效果 */
+.shimmer {
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* 摇摆效果 */
+.shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10rpx);
+  }
+  75% {
+    transform: translateX(10rpx);
+  }
+}
+
+/* 弹性进入 */
+.elastic-in {
+  animation: elasticIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes elasticIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* 渐变背景动画 */
+.gradient-animation {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ==================== 响应式动画控制 ==================== */
+
+/* 注意：微信小程序不支持@media查询和通配符选择器 */
+/* 如需减少动画，可通过JS动态控制动画类名 */
+
+/* 性能优化 */
+.will-animate {
+  will-change: transform, opacity;
+}
+
+.will-animate.finished {
+  will-change: auto;
+}
+
+/* ==================== 动画组合类 ==================== */
+
+/* 入场动画组合 */
+.entrance-animation {
+  animation: fadeIn 0.3s ease-out, slideInUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* 退场动画组合 */
+.exit-animation {
+  animation: fadeOut 0.3s ease-in, slideInDown 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* 强调动画组合 */
+.emphasis-animation {
+  animation: bounceScale 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55), shimmer 1s ease-in-out;
+}

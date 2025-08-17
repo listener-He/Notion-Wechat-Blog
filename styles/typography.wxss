@@ -1,0 +1,165 @@
+/**
+ * 墨语·Light & Ink 字体系统
+ * 基于阅读体验的字体排版规范
+ */
+
+/* ==================== 字体族定义 ==================== */
+
+:root {
+  /* 主字体族 - 优雅阅读 */
+  --font-family-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  
+  /* 标题字体族 - 醒目展示 */
+  --font-family-heading: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', sans-serif;
+  
+  /* 代码字体族 - 等宽显示 */
+  --font-family-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  
+  /* 装饰字体族 - 特殊场景 */
+  --font-family-decorative: 'Kaiti SC', 'KaiTi', 'STKaiti', serif;
+  
+  /* 字体大小系统 */
+  --font-size-xs: 20rpx;      /* 极小 */
+  --font-size-sm: 24rpx;      /* 小 */
+  --font-size-base: 28rpx;    /* 基础 */
+  --font-size-md: 32rpx;      /* 中等 */
+  --font-size-lg: 36rpx;      /* 大 */
+  --font-size-xl: 44rpx;      /* 特大 */
+  --font-size-2xl: 52rpx;     /* 超大 */
+  --font-size-3xl: 64rpx;     /* 巨大 */
+  
+  /* 行高系统 */
+  --line-height-tight: 1.2;   /* 紧密 */
+  --line-height-normal: 1.5;  /* 正常 */
+  --line-height-relaxed: 1.6; /* 宽松 */
+  --line-height-loose: 1.8;   /* 松散 */
+  
+  /* 字重系统 */
+  --font-weight-light: 300;   /* 细体 */
+  --font-weight-normal: 400;  /* 正常 */
+  --font-weight-medium: 500;  /* 中等 */
+  --font-weight-semibold: 600;/* 半粗 */
+  --font-weight-bold: 700;    /* 粗体 */
+  
+  /* 字间距系统 */
+  --letter-spacing-tight: -0.05em;  /* 紧密 */
+  --letter-spacing-normal: 0;       /* 正常 */
+  --letter-spacing-wide: 0.05em;    /* 宽松 */
+  --letter-spacing-wider: 0.1em;    /* 更宽松 */
+}
+
+/* ==================== 基础字体样式 ==================== */
+
+/* 全局字体设置 */
+page {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--theme-text-primary, #2c3e50);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 标题层级系统 */
+.heading-1, .h1 {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  margin-bottom: 40rpx;
+  color: var(--theme-text-primary);
+}
+
+.heading-2, .h2 {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  margin-bottom: 32rpx;
+  color: var(--theme-text-primary);
+}
+
+.heading-3, .h3 {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-normal);
+  margin-bottom: 28rpx;
+  color: var(--theme-text-primary);
+}
+
+.heading-4, .h4 {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-normal);
+  margin-bottom: 24rpx;
+  color: var(--theme-text-primary);
+}
+
+.heading-5, .h5 {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-normal);
+  margin-bottom: 20rpx;
+  color: var(--theme-text-secondary);
+}
+
+.heading-6, .h6 {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-normal);
+  margin-bottom: 16rpx;
+  color: var(--theme-text-secondary);
+}
+
+/* ==================== 正文排版系统 ==================== */
+
+/* 段落样式 */
+.paragraph, .p {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: 32rpx;
+  color: var(--theme-text-primary);
+}
+
+.paragraph-large {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: 36rpx;
+}
+
+.paragraph-small {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  margin-bottom: 24rpx;
+}
+
+/* 引用样式 */
+.blockquote {
+  font-family: var(--font-family-decorative);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-loose);
+  font-style: italic;
+  color: var(--theme-text-secondary);
+  border-left: 8rpx solid var(--theme-accent);
+  padding-left: 40rpx;
+  margin: 40rpx 0;
+  position: relative;
+}
+
+/* 注意：微信小程序不支持伪元素选择器 ::before */
+/* 引号需要使用额外的view元素实现 */
+.blockquote-mark {
+  position: absolute;
+  top: -10rpx;
+  left: 10rpx;
+  font-size: 60rpx;
+  color: var(--theme-accent);
+  opacity: 0.3;
+  font-family: serif;
+}
