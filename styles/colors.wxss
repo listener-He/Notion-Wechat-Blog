@@ -16,11 +16,16 @@
   --theme-secondary: #95a5a6;        /* 银灰 */
   --theme-accent: #e74c3c;           /* 朱砂红 */
   --theme-accent-light: #ec7063;     /* 浅朱砂 */
+  --theme-accent-start: #3b82f6;
+  --theme-accent-end: #8b5cf6;
+  --theme-success-start: #22c55e;
+  --theme-success-end: #10b981;
   
   /* 背景色系 */
   --theme-bg-primary: #ffffff;       /* 纯白 */
   --theme-bg-secondary: #f8f9fa;     /* 雪白 */
   --theme-bg-light: #ecf0f1;         /* 浅灰 */
+  --theme-bg-tertiary: #ecf0f1;
   --theme-bg-dark: #2c3e50;          /* 深色背景 */
   
   /* 文字色系 */
@@ -145,11 +150,10 @@
   
   --theme-border-light: #404040;     /* 深浅边框 */
   --theme-border: #606060;           /* 深标准边框 */
-  --theme-border-dark: #808080;      /* 深深边框 */
   
-  --theme-shadow-light: rgba(0, 0, 0, 0.3);   /* 深浅阴影 */
-  --theme-shadow: rgba(0, 0, 0, 0.5);         /* 深标准阴影 */
-  --theme-shadow-dark: rgba(0, 0, 0, 0.7);    /* 深深阴影 */
+  --theme-border-dark: #808080;      /* 深深边框 */
+  --theme-accent-start: #60a5fa;
+  --theme-accent-end: #a78bfa;
 }
 
 /* ==================== 语义化色彩类 ==================== */

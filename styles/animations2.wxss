@@ -1,0 +1,10 @@
+.animate-fade-in { animation: fadeIn var(--duration-base) var(--timing-function) forwards; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.animate-slide-in-up { animation: slideInUp var(--duration-base) var(--timing-function) forwards; }
+@keyframes slideInUp { from { opacity: 0; transform: translateY(20rpx); } to { opacity: 1; transform: translateY(0); } }
+.card-3d { transform-style: preserve-3d; perspective: 1000rpx; }
+.card-3d:hover { transform: translateZ(8rpx) translateY(-4rpx); }
+.ripple { position: relative; overflow: hidden; }
+.ripple-effect { position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.3); transform: scale(0); animation: ripple 0.6s linear; pointer-events: none; }
+@keyframes ripple { to { transform: scale(4); opacity: 0; } }
+:root { --duration-fast: 150ms; --duration-base: 250ms; --duration-theme: 300ms; --timing-function: cubic-bezier(0.2, 0, 0.2, 1); --timing-function-theme: cubic-bezier(0.4, 0, 0.2, 1); }

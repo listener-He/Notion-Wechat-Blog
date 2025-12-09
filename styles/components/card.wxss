@@ -1,0 +1,16 @@
+.card {
+  background: var(--theme-bg-primary);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+  transition: all var(--duration-base) var(--timing-function);
+}
+
+.card:hover { box-shadow: var(--shadow-2); transform: translateY(-4rpx); }
+.card-body { padding: var(--space-6); }
+.card-header { padding: var(--space-6); border-bottom: 1rpx solid var(--theme-border-light); }
+.card-footer { padding: var(--space-6); border-top: 1rpx solid var(--theme-border-light); }
+
+.card-glass { border: none; }
+.card-glass { background: rgba(255,255,255,0.7); backdrop-filter: blur(12rpx); -webkit-backdrop-filter: blur(12rpx); }
+.theme-dark .card-glass { background: rgba(30,41,59,0.7); }

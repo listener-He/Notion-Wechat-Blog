@@ -1,0 +1,19 @@
+.glass-effect {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12rpx);
+  -webkit-backdrop-filter: blur(12rpx);
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-dark .glass-effect {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1rpx solid rgba(66, 84, 109, 0.3);
+}
+
+.glass-fallback {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.theme-dark .glass-fallback {
+  background: rgba(30, 41, 59, 0.9);
+}

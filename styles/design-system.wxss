@@ -15,6 +15,15 @@
 @import './typography.wxss';
 @import './icons.wxss';
 @import './components.wxss';
+@import './shadows.wxss';
+@import './radius.wxss';
+@import './glass.wxss';
+@import './container.wxss';
+@import './grid.wxss';
+@import './holiday-themes.wxss';
+@import './code-highlight.wxss';
+@import './performance.wxss';
+@import './animations2.wxss';
 
 /* ==================== 全局重置样式 ==================== */
 

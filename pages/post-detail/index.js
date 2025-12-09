@@ -208,11 +208,10 @@ Page({
 
     // 计算字数统计和预计阅读时间
     if (post.textContent) {
-      // 处理textContent中的\n字符，将其转换为真正的换行符
-      const processedTextContent = post.textContent
-      // if (typeof processedTextContent === 'string') {
-      //   processedTextContent = processedTextContent.replace(/\\n/g, '\n')
-      // }
+      let processedTextContent = post.textContent
+      if (typeof processedTextContent === 'string') {
+        processedTextContent = processedTextContent.replace(/\\r\\n|\\n/g, '\n')
+      }
 
       // 计算字数（去除Markdown标记符号）
       const plainText = processedTextContent
@@ -271,10 +270,8 @@ Page({
     // 这里可以添加更复杂的HTML处理逻辑
     // 目前简单处理，实际项目中可能需要使用专门的HTML解析库
     return html
-      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '') // 移除script标签
-      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '') // 移除style标签
-      .replace(/style="[^"]*"/gi, '') // 移除内联样式
-      .replace(/class="[^"]*"/gi, '') // 移除class属性
+      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
   },
 
   // 处理链接点击

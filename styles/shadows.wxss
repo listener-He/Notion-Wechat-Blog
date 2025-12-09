@@ -1,0 +1,5 @@
+:root { --shadow-1: 0 2rpx 4rpx rgba(0, 0, 0, 0.04); --shadow-2: 0 4rpx 12rpx rgba(0, 0, 0, 0.08); --shadow-3: 0 10rpx 24rpx rgba(0, 0, 0, 0.12); }
+.theme-dark { --shadow-1: 0 2rpx 4rpx rgba(0, 0, 0, 0.2); --shadow-2: 0 4rpx 12rpx rgba(0, 0, 0, 0.3); --shadow-3: 0 10rpx 24rpx rgba(0, 0, 0, 0.4); }
+.shadow-1 { box-shadow: var(--shadow-1); }
+.shadow-2 { box-shadow: var(--shadow-2); }
+.shadow-3 { box-shadow: var(--shadow-3); }

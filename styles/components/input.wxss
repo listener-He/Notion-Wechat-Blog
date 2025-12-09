@@ -1,0 +1,19 @@
+.input {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: var(--theme-bg-secondary);
+  border: 1rpx solid var(--theme-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  transition: all var(--duration-base);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--theme-accent-start);
+  box-shadow: 0 0 0 3rpx rgba(59, 130, 246, 0.2);
+}
+
+.input::placeholder { color: var(--theme-text-muted); }
+.input-disabled { opacity: 0.6; cursor: not-allowed; }

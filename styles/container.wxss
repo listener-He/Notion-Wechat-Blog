@@ -1,0 +1,32 @@
+.container {
+  width: 100%;
+  max-width: 1200rpx;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+.container-narrow {
+  width: 100%;
+  max-width: 800rpx;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+:root {
+  --space-1: 4rpx;
+  --space-2: 8rpx;
+  --space-3: 12rpx;
+  --space-4: 16rpx;
+  --space-5: 20rpx;
+  --space-6: 24rpx;
+  --space-8: 32rpx;
+  --space-10: 40rpx;
+  --space-12: 48rpx;
+  --space-16: 64rpx;
+}
+
+.screen-xs .container { max-width: 320rpx; }
+.screen-sm .container { max-width: 640rpx; }
+.screen-md .container { max-width: 768rpx; }
+.screen-lg .container { max-width: 1024rpx; }
+.screen-xl .container { max-width: 1200rpx; }

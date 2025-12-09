@@ -1,0 +1,3 @@
+<view class="reading-progress">
+  <view class="reading-progress-bar" style="width: {{progress}}%"></view>
+</view>

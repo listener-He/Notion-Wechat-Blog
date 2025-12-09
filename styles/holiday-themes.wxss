@@ -1,0 +1,3 @@
+.theme-spring { --theme-accent-start: #C41E3A; --theme-accent-end: #E63946; --theme-bg-primary: #FFF8F0; --theme-bg-secondary: #FFF0E6; --theme-text-primary: #2D1810; }
+.theme-qingming { --theme-accent-start: #2E7D32; --theme-accent-end: #4CAF50; --theme-bg-primary: #F5F5F5; --theme-bg-secondary: #E8F5E8; }
+.theme-midautumn { --theme-accent-start: #F97316; --theme-accent-end: #FB923C; --theme-bg-primary: #FFFDF5; --theme-bg-secondary: #FEF3C7; }

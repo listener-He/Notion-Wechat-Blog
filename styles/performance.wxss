@@ -1,0 +1,3 @@
+.gpu-accelerated { transform: translateZ(0); will-change: transform; }
+.avoid-repaint { contain: layout paint; }
+.offscreen { content-visibility: auto; }
