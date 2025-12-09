@@ -462,11 +462,11 @@ Page({
       this.setData({ transitionQuote })
       console.log('过渡金句加载完成:', transitionQuote)
 
-      // 缩短延迟时间，快速隐藏过渡界面
+      // 缩短延迟时间，快速隐藏过渡界面 随机 1.5 ～ 3秒
       setTimeout(() => {
         console.log('隐藏过渡界面')
         this.setData({ showTransition: false })
-      }, 500)
+      }, Math.random() * 1500 + 1500)
     } catch (error) {
       console.error('初始化阅读体验失败:', error)
       // 失败时直接隐藏过渡界面

@@ -18,11 +18,11 @@
     "notion",
     "notionnext"
   ],
-  "author": "NotionNext Team",
+  "author": "Honesty",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tangly1024/NotionNext"
+    "url": "https://github.com/listener-He/NotionNext"
   },
   "devDependencies": {
     "eslint": "^8.0.0",
@@ -36,7 +36,6 @@
     "node": ">=14.0.0"
   },
   "dependencies": {
-    "@babel/runtime": "^7.28.3",
-    "marked": "^16.1.2"
+    "@babel/runtime": "^7.28.3"
   }
 }

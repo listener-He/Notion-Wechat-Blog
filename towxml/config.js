@@ -3,12 +3,12 @@ module.exports = {
 
     // 数学公式解析API
     latex:{
-        api:'http://towxml.vvadd.com/?tex'
+        api:'https://blog.hehouhui.cn/api/markdown-server?tex'
     },
 
     // yuml图解析APPI
     yuml:{
-        api:'http://towxml.vvadd.com/?yuml'
+        api:'https://blog.hehouhui.cn/api/markdown-server?yuml'
     },
 
     // markdown解析配置，保留需要的选项即可
