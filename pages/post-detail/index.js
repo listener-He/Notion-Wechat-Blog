@@ -1,6 +1,5 @@
 // pages/post-detail/index.js
 const app = getApp()
-const towxml = require('../../towxml/index')
 const hitokoto = require('../../utils/hitokoto')
 const hitokotoManager = hitokoto.hitokotoManager
 const themeManager = require('../../utils/themeManager')
@@ -86,7 +85,7 @@ Page({
   },
 
   toggleThemeQuick() {
-    const newTheme = themeManagerAlt.toggleTheme()
+    const newTheme = themeManager.toggleTheme()
     this.setData({ currentTheme: newTheme, themeOpacity: 0.98 })
     setTimeout(() => this.setData({ themeOpacity: 1 }), 200)
   },
@@ -130,8 +129,7 @@ Page({
           pageCover: result.data.pageCover,
           pageIcon: result.data.pageIcon,
           publishDay: result.data.publishDay,
-          textContent: result.data.textContent,
-          htmlContent: result.data.htmlContent,
+          markdownContent: result.data.markdownContent,
           content: result.data.content,
           wordCount: result.data.wordCount,
           readingTime: result.data.readingTime,
@@ -213,15 +211,10 @@ Page({
     }
 
     // 计算字数统计和预计阅读时间
-    const rawText = post.textContent || ''
+    const rawText = post.markdownContent || ''
     if (rawText) {
-      let processedTextContent = rawText
-      if (typeof processedTextContent === 'string') {
-        processedTextContent = processedTextContent.replace(/\\r\\n|\\n/g, '\n')
-      }
-
       // 计算字数（去除Markdown标记符号）
-      const plainText = processedTextContent
+      const plainText = rawText
         .replace(/#{1,6}\s+/g, '') // 移除标题标记
         .replace(/\*\*([^*]+)\*\*/g, '$1') // 移除粗体标记
         .replace(/\*([^*]+)\*/g, '$1') // 移除斜体标记
@@ -239,50 +232,16 @@ Page({
       post.wordCount = wordCount
       post.readingTime = readingTime
 
-      try {
-        const isHtml = /<\w+[^>]*>/.test(processedTextContent)
-        const type = isHtml ? 'html' : 'markdown'
-        const nodes = towxml(processedTextContent, type, { base: '', theme: 'light' })
-        const hasChildren = nodes && nodes.children && nodes.children.length > 0
-        if (hasChildren) {
-          this.setData({ parsedContent: nodes, isContentReady: true })
-        } else {
-          const htmlFallback = isHtml ? processedTextContent : undefined
-          this.setData({
-            post: Object.assign({}, this.data.post, {
-              content: htmlFallback || post.content || processedTextContent
-            }),
-            isContentReady: true
-          })
-        }
-      } catch (error) {
-        console.error('towxml解析失败:', error)
-        this.setData({
-          post: Object.assign({}, this.data.post, {
-            content: post.content || processedTextContent
-          }),
-          isContentReady: true
-        })
-      }
+      // 设置内容
+      post.content = rawText
     }
 
-    // 处理HTML内容为rich-text可用的格式（备用）
-    if (post.htmlContent) {
-      post.content = this.processHtmlContent(post.htmlContent)
-    }
+    this.setData({
+      post,
+      isContentReady: true
+    })
 
     return post
-  },
-
-  // 处理HTML内容
-  processHtmlContent(html) {
-    if (!html) return ''
-
-    // 这里可以添加更复杂的HTML处理逻辑
-    // 目前简单处理，实际项目中可能需要使用专门的HTML解析库
-    return html
-      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
-      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
   },
 
   // 处理链接点击

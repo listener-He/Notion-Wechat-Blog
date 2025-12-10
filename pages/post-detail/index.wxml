@@ -156,8 +156,12 @@
   </view>
   
   <!-- 文章内容 -->
-  <towxml wx:if="{{parsedContent}}" nodes="{{parsedContent}}" class="post-content post-content-full" />
-  <rich-text wx:elif="{{post.content}}" nodes="{{post.content}}" class="post-content post-content-full" />
+  <mp-html 
+    wx:if="{{post.content}}" 
+    content="{{post.content}}" 
+    markdown="{{true}}" 
+    class="post-content post-content-full" 
+  />
   <view wx:else class="no-content">暂无内容</view>
   
   <!-- 版权信息 -->

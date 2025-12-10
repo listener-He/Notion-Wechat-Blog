@@ -5,7 +5,7 @@
   "backgroundColor": "#ffffff",
   "usingComponents": {
     "artalk-comment": "/components/artalk-comment/index",
-    "towxml": "/towxml/towxml",
+    "mp-html": "/components/mp-html/index",
     "reading-progress": "/components/reading-progress/index",
     "icon": "/components/icon/index"
   }
