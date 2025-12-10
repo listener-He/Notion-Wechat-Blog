@@ -99,6 +99,10 @@ Page({
     this.hasLoadedInitialData = true
   },
 
+  onReady() {
+    this.attachLoadObserver()
+  },
+
   onUnload() {
     this.destroyLoadObserver()
   },
@@ -137,6 +141,9 @@ Page({
   attachLoadObserver() {
     try {
       if (!this.loadObserver) return
+      if (this.loadObserver && this.loadObserver.disconnect) {
+        this.loadObserver.disconnect()
+      }
       const callback = (res) => {
         if (res && res.intersectionRatio > 0) {
           if (this.data.hasMore && !this.data.loadingMore && !this.data.exhausted) {
@@ -144,14 +151,14 @@ Page({
           }
         }
       }
-      this.loadObserver.relativeToViewport({ bottom: 300 }).observe('.load-more-sentinel', callback)
+      this.loadObserver.relativeToViewport({ bottom: 300 }).observe('#loadMoreSentinel', callback)
     } catch (e) {
       // 目标元素可能尚未渲染，下一帧重试
       try {
         wx.nextTick(() => {
           try {
             if (this.loadObserver) {
-              this.loadObserver.relativeToViewport({ bottom: 300 }).observe('.load-more-sentinel', (res) => {
+              this.loadObserver.relativeToViewport({ bottom: 300 }).observe('#loadMoreSentinel', (res) => {
                 if (res && res.intersectionRatio > 0) {
                   if (this.data.hasMore && !this.data.loadingMore && !this.data.exhausted) {
                     this.loadMore()

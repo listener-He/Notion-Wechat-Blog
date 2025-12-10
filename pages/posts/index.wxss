@@ -473,7 +473,7 @@
 
 /* 预加载哨兵 */
 .load-more-sentinel {
-  height: 2rpx;
+  height: 8rpx;
   width: 100%;
 }
 
