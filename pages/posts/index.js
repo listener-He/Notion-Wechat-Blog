@@ -18,6 +18,8 @@ const GRADIENTS = [
   ['#bdc3c7', '#2c3e50']
 ]
 
+const PRELOAD_THRESHOLD_PX = 300
+
 function generateTagGradient(tagName = '') {
   let hash = 0
   for (let i = 0; i < tagName.length; i++) {
@@ -94,18 +96,10 @@ Page({
     this.loadSearchHistory()
     this.loadFilterPreferences()
     this.loadInitialData()
-    this.initLoadObserver()
     // 标记已经加载过初始数据
     this.hasLoadedInitialData = true
   },
 
-  onReady() {
-    this.attachLoadObserver()
-  },
-
-  onUnload() {
-    this.destroyLoadObserver()
-  },
 
   onShow() {
     // 检查主题是否需要更新
@@ -127,60 +121,36 @@ Page({
     this.refreshData()
   },
 
-  // 预加载观察器
-  initLoadObserver() {
-    try {
-      if (this.loadObserver) return
-      this.loadObserver = wx.createIntersectionObserver(this)
-      this.attachLoadObserver()
-    } catch (e) {
-      console.error('初始化预加载观察器失败:', e)
+  onReachBottom() {
+    if (this.shouldLoadMore()) {
+      this.loadMore()
     }
   },
 
-  attachLoadObserver() {
+  // 页面滚动预加载（高性能、无依赖）
+  onPageScroll() {
+    const now = Date.now()
+    if (this._lastScrollTs && (now - this._lastScrollTs) < 120) return
+    this._lastScrollTs = now
+    this.checkPreload()
+  },
+
+  shouldLoadMore() {
+    return this.data.hasMore && !this.data.loadingMore && !this.data.loading && !this.data.exhausted
+  },
+
+  checkPreload() {
+    if (!this.shouldLoadMore()) return
     try {
-      if (!this.loadObserver) return
-      if (this.loadObserver && this.loadObserver.disconnect) {
-        this.loadObserver.disconnect()
-      }
-      const callback = (res) => {
-        if (res && res.intersectionRatio > 0) {
-          if (this.data.hasMore && !this.data.loadingMore && !this.data.exhausted) {
-            this.loadMore()
-          }
+      const query = wx.createSelectorQuery().in(this)
+      query.select('#loadMoreSentinel').boundingClientRect(rect => {
+        if (!rect) return
+        const winH = wx.getSystemInfoSync().windowHeight
+        if (rect.top - winH < PRELOAD_THRESHOLD_PX) {
+          this.loadMore()
         }
-      }
-      this.loadObserver.relativeToViewport({ bottom: 300 }).observe('#loadMoreSentinel', callback)
-    } catch (e) {
-      // 目标元素可能尚未渲染，下一帧重试
-      try {
-        wx.nextTick(() => {
-          try {
-            if (this.loadObserver) {
-              this.loadObserver.relativeToViewport({ bottom: 300 }).observe('#loadMoreSentinel', (res) => {
-                if (res && res.intersectionRatio > 0) {
-                  if (this.data.hasMore && !this.data.loadingMore && !this.data.exhausted) {
-                    this.loadMore()
-                  }
-                }
-              })
-            }
-          } catch (_err) {}
-        })
-      } catch (_e) {}
-    }
-  },
-
-  destroyLoadObserver() {
-    try {
-      if (this.loadObserver && this.loadObserver.disconnect) {
-        this.loadObserver.disconnect()
-      }
-      this.loadObserver = null
-    } catch (e) {
-      console.error('销毁预加载观察器失败:', e)
-    }
+      }).exec()
+    } catch (e) {}
   },
 
   // 加载初始数据
@@ -407,9 +377,9 @@ Page({
         // 为当前批次封面设置超时兜底
         this.scheduleCoverFallbackTimers(postsWithColors)
 
-        // 确保观察器已正确附加
+        // 下一帧检查是否需要继续预加载
         wx.nextTick(() => {
-          this.attachLoadObserver()
+          this.checkPreload()
         })
       }
 
