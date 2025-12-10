@@ -224,6 +224,9 @@
     </view>
   </view>
 
+  <!-- 预加载哨兵 -->
+  <view wx:if="{{!loading && hasMore}}" class="load-more-sentinel"></view>
+
   <!-- 加载状态 -->
   <view wx:if="{{loading}}" class="loading">
     <view class="loading-spinner"></view>

@@ -32,15 +32,13 @@ Page({
     posts: [],
     categories: [],
     tags: [],
-    tagsToShow: [],
     loading: true,
     loadingMore: false,
     showSkeleton: false,
     searchKeyword: '',
     selectedCategory: '',
     selectedTags: [],
-    showTagFilter: false,
-    showTagExpanded: false,
+    // 移除未使用的标签筛选与展开状态
     showSearchHistory: false,
     suggestionsVisible: false,
     suggestionCategories: [],
@@ -73,15 +71,9 @@ Page({
     exhausted: false,
     coverFallbackMap: {},
   },
-    coverFallbackMap: {},
-  },
+  
 
-  // 更新展示的标签集合
-  updateTagsToShow() {
-    const limit = this.data.showTagExpanded ? 16 : 8
-    const list = (this.data.tags || []).slice(0, limit)
-    this.setData({ tagsToShow: list })
-  },
+  
 
   onLoad() {
     console.log('文章页面加载')
@@ -102,8 +94,13 @@ Page({
     this.loadSearchHistory()
     this.loadFilterPreferences()
     this.loadInitialData()
+    this.initLoadObserver()
     // 标记已经加载过初始数据
     this.hasLoadedInitialData = true
+  },
+
+  onUnload() {
+    this.destroyLoadObserver()
   },
 
   onShow() {
@@ -126,10 +123,56 @@ Page({
     this.refreshData()
   },
 
-  onReachBottom() {
-    console.log('触底加载更多')
-    if (this.data.hasMore && !this.data.loadingMore) {
-      this.loadMore()
+  // 预加载观察器
+  initLoadObserver() {
+    try {
+      if (this.loadObserver) return
+      this.loadObserver = wx.createIntersectionObserver(this)
+      this.attachLoadObserver()
+    } catch (e) {
+      console.error('初始化预加载观察器失败:', e)
+    }
+  },
+
+  attachLoadObserver() {
+    try {
+      if (!this.loadObserver) return
+      const callback = (res) => {
+        if (res && res.intersectionRatio > 0) {
+          if (this.data.hasMore && !this.data.loadingMore && !this.data.exhausted) {
+            this.loadMore()
+          }
+        }
+      }
+      this.loadObserver.relativeToViewport({ bottom: 300 }).observe('.load-more-sentinel', callback)
+    } catch (e) {
+      // 目标元素可能尚未渲染，下一帧重试
+      try {
+        wx.nextTick(() => {
+          try {
+            if (this.loadObserver) {
+              this.loadObserver.relativeToViewport({ bottom: 300 }).observe('.load-more-sentinel', (res) => {
+                if (res && res.intersectionRatio > 0) {
+                  if (this.data.hasMore && !this.data.loadingMore && !this.data.exhausted) {
+                    this.loadMore()
+                  }
+                }
+              })
+            }
+          } catch (_err) {}
+        })
+      } catch (_e) {}
+    }
+  },
+
+  destroyLoadObserver() {
+    try {
+      if (this.loadObserver && this.loadObserver.disconnect) {
+        this.loadObserver.disconnect()
+      }
+      this.loadObserver = null
+    } catch (e) {
+      console.error('销毁预加载观察器失败:', e)
     }
   },
 
@@ -290,18 +333,21 @@ Page({
         this.resetCoverState()
       }
 
-      const params = {
-        page: reset ? 1 : this.data.currentPage,
-        pageSize: this.data.pageSize
-      }
+    const params = {
+      page: reset ? 1 : this.data.currentPage,
+      pageSize: this.data.pageSize
+    }
 
-      // 添加筛选条件
-      if (this.data.selectedCategory) {
-        params.category = this.data.selectedCategory
-      }
-      if (this.data.searchKeyword) {
-        params.keyword = this.data.searchKeyword
-      }
+    // 添加筛选条件
+    if (this.data.selectedCategory) {
+      params.category = this.data.selectedCategory
+    }
+    if (this.data.searchKeyword) {
+      params.keyword = this.data.searchKeyword
+    }
+    if (this.data.selectedTags && this.data.selectedTags.length > 0) {
+      params.tags = this.data.selectedTags
+    }
 
       const result = await app.request({
         url: '/posts',
@@ -334,7 +380,9 @@ Page({
 
         const hasMore = (typeof pagination.hasNext !== 'undefined')
           ? !!pagination.hasNext
-          : (newPosts.length === this.data.pageSize)
+          : (typeof pagination.total === 'number' && (typeof pagination.current === 'number' || typeof pagination.page === 'number'))
+            ? (((pagination.current || pagination.page || (reset ? 1 : this.data.currentPage)) * this.data.pageSize) < pagination.total)
+            : (newPosts.length >= this.data.pageSize)
 
         const nextPosts = reset ? postsWithColors : this.data.posts.concat(postsWithColors)
 
@@ -351,6 +399,11 @@ Page({
 
         // 为当前批次封面设置超时兜底
         this.scheduleCoverFallbackTimers(postsWithColors)
+
+        // 确保观察器已正确附加
+        wx.nextTick(() => {
+          this.attachLoadObserver()
+        })
       }
 
       return result
@@ -570,11 +623,7 @@ Page({
     }
   },
 
-  // 切换标签展开
-  toggleTagExpand() {
-    this.setData({ showTagExpanded: !this.data.showTagExpanded })
-    this.updateTagsToShow()
-  },
+  
 
   // 清除分类
   async clearCategory() {
@@ -589,13 +638,7 @@ Page({
     }
   },
 
-  // 切换标签筛选显示
-  toggleTagFilter() {
-    this.setData({
-      showTagFilter: !this.data.showTagFilter
-    })
-    this.saveFilterPreferences()
-  },
+  
 
   // 清空筛选
   async clearFilters() {
@@ -966,10 +1009,8 @@ Page({
       if (prefs) {
         this.setData({
           selectedCategory: prefs.selectedCategory || '',
-          selectedTags: Array.isArray(prefs.selectedTags) ? prefs.selectedTags : (prefs.selectedTag ? [prefs.selectedTag] : []),
-          showTagFilter: !!prefs.showTagFilter
+          selectedTags: Array.isArray(prefs.selectedTags) ? prefs.selectedTags : (prefs.selectedTag ? [prefs.selectedTag] : [])
         })
-        this.updateTagsToShow()
       }
     } catch (error) {
       console.error('加载筛选偏好失败:', error)
@@ -981,8 +1022,7 @@ Page({
     try {
       const prefs = {
         selectedCategory: this.data.selectedCategory,
-        selectedTags: this.data.selectedTags,
-        showTagFilter: this.data.showTagFilter
+        selectedTags: this.data.selectedTags
       }
       // 缓存30天
       StorageUtil.set('posts_filter', prefs, CACHE_TIME.MONTH)

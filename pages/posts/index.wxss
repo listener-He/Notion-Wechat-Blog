@@ -471,6 +471,12 @@
   100% { background-position: -200% 0; }
 }
 
+/* 预加载哨兵 */
+.load-more-sentinel {
+  height: 2rpx;
+  width: 100%;
+}
+
 /* 页面特定样式增强 */
 .posts-container {
   position: relative;
