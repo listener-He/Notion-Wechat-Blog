@@ -3,5 +3,8 @@
   "enablePullDownRefresh": true,
   "onReachBottomDistance": 50,
   "backgroundTextStyle": "dark",
-  "backgroundColor": "#f8f9fa"
+  "backgroundColor": "#f8f9fa",
+  "usingComponents": {
+    "icon": "/components/icon/index"
+  }
 }

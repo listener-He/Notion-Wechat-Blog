@@ -614,52 +614,7 @@
   background: rgba(102, 126, 234, 1);
 }
 
-/* 响应式设计 */
-@media (max-width: 375px) {
-  .post-title {
-    font-size: 36rpx;
-  }
-  
-  .post-content {
-    padding: 0 20rpx;
-  }
-  
-  .post-info {
-    padding: 20rpx;
-  }
-}
-
-/* 深色模式支持 */
-@media (prefers-color-scheme: dark) {
-  .container {
-    background-color: #1a1a1a;
-  }
-  
-  .post-title {
-    color: #fff;
-  }
-  
-  .post-content rich-text {
-    color: #e0e0e0;
-  }
-  
-  .section-title {
-    color: #fff;
-  }
-  
-  .related-item {
-    background: #2a2a2a;
-  }
-  
-  .related-title {
-    color: #fff;
-  }
-  
-  .bottom-actions {
-    background: #2a2a2a;
-    border-top-color: #404040;
-  }
-}
+/* 小程序不支持@media查询，移除响应式与系统深色匹配 */
 
 /* 阅读体验样式 */
 .theme-transition {

@@ -1,4 +1,4 @@
-export default class ThemeManager {
+class ThemeManager {
   constructor() { this.initTheme() }
   initTheme() {
     const savedTheme = wx.getStorageSync('theme')
@@ -9,12 +9,6 @@ export default class ThemeManager {
   applyTheme(theme) {
     if (theme !== 'light' && theme !== 'dark') return
     wx.setStorageSync('theme', theme)
-    const pages = getCurrentPages()
-    if (pages.length > 0) {
-      const page = pages[pages.length - 1]
-      const pageEl = page.selectComponent('#app')
-      if (pageEl) { pageEl.setData({ theme }) }
-    }
     wx.setNavigationBarColor({
       frontColor: theme === 'dark' ? '#ffffff' : '#000000',
       backgroundColor: theme === 'dark' ? '#0f172a' : '#ffffff'
@@ -27,3 +21,5 @@ export default class ThemeManager {
     return newTheme
   }
 }
+
+module.exports = new ThemeManager()

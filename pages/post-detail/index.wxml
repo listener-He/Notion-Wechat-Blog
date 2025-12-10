@@ -18,9 +18,7 @@
   </view>
 
   <!-- 阅读进度条 -->
-  <view wx:if="{{!showTransition && readingProgress > 0}}" class="reading-progress">
-    <view class="progress-bar" style="width: {{readingProgress}}%"></view>
-  </view>
+  <reading-progress wx:if="{{!showTransition}}" progress="{{readingProgress}}" />
 
   <!-- 阅读完成彩蛋弹框 -->
   <view wx:if="{{showReadingComplete}}" class="reading-egg-modal" bindtap="hideReadingComplete">
@@ -114,14 +112,14 @@
   <view wx:if="{{post && post.title}}" class="post-meta-card">
     <view class="meta-row">
       <view class="meta-item">
-        <text class="meta-icon">📅</text>
+        <icon name="calendar" size="28" color="var(--theme-text-primary)" />
         <view class="meta-content">
           <text class="meta-label">发布时间</text>
           <text class="meta-value">{{post.publishDate}}</text>
         </view>
       </view>
       <view wx:if="{{post.lastEditedDate && post.lastEditedDate !== post.publishDate}}" class="meta-item">
-        <text class="meta-icon">✏️</text>
+        <icon name="edit" size="28" color="var(--theme-text-primary)" />
         <view class="meta-content">
           <text class="meta-label">最后编辑</text>
           <text class="meta-value">{{post.lastEditedDate}}</text>
@@ -131,14 +129,14 @@
     
     <view class="meta-row">
       <view wx:if="{{post.category}}" class="meta-item">
-        <text class="meta-icon">📂</text>
+        <icon name="folder" size="28" color="var(--theme-text-primary)" />
         <view class="meta-content">
           <text class="meta-label">分类</text>
           <text class="meta-value">{{post.category}}</text>
         </view>
       </view>
       <view wx:if="{{post.wordCount}}" class="meta-item">
-        <text class="meta-icon">📊</text>
+        <icon name="chart" size="28" color="var(--theme-text-primary)" />
         <view class="meta-content">
           <text class="meta-label">字数统计</text>
           <text class="meta-value">{{post.wordCount}} 字</text>
@@ -148,7 +146,7 @@
     
     <view wx:if="{{post.readingTime}}" class="meta-row">
       <view class="meta-item full-width">
-        <text class="meta-icon">⏱️</text>
+        <icon name="clock" size="28" color="var(--theme-text-primary)" />
         <view class="meta-content">
           <text class="meta-label">预计阅读时间</text>
           <text class="meta-value">{{post.readingTime}} 分钟</text>
@@ -158,8 +156,8 @@
   </view>
   
   <!-- 文章内容 -->
-  <towxml wx:if="{{parsedContent}}" nodes="{{parsedContent}}" class="post-content-full" />
-  <rich-text wx:elif="{{post.content}}" nodes="{{post.content}}" class="post-content-full" />
+  <towxml wx:if="{{parsedContent}}" nodes="{{parsedContent}}" class="post-content post-content-full" />
+  <rich-text wx:elif="{{post.content}}" nodes="{{post.content}}" class="post-content post-content-full" />
   <view wx:else class="no-content">暂无内容</view>
   
   <!-- 版权信息 -->
@@ -240,17 +238,22 @@
 <!-- 底部操作栏 -->
 <view wx:if="{{post && post.title}}" class="bottom-actions">
   <button class="action-btn btn-hover btn-ripple" bindtap="goBack">
-    <text class="action-icon">⬅️</text>
+    <icon name="arrowLeft" size="28" color="var(--theme-text-primary)" />
     <text class="action-text">返回</text>
   </button>
   
   <button class="action-btn btn-hover btn-ripple" open-type="share">
-    <text class="action-icon">📤</text>
+    <icon name="share" size="28" color="var(--theme-text-primary)" />
     <text class="action-text">分享</text>
   </button>
   
   <button class="action-btn btn-hover btn-ripple {{isFavorite ? 'like-heart' : ''}}" bindtap="toggleFavorite">
-    <text class="action-icon">{{isFavorite ? '❤️' : '🤍'}}</text>
+    <icon name="heart" size="28" color="{{isFavorite ? '#e0245e' : 'var(--theme-text-primary)'}}" />
     <text class="action-text">{{isFavorite ? '已收藏' : '收藏'}}</text>
+  </button>
+  
+  <button class="action-btn btn-hover btn-ripple" bindtap="toggleThemeQuick">
+    <icon name="chart" size="28" color="var(--theme-text-primary)" />
+    <text class="action-text">主题</text>
   </button>
 </view>

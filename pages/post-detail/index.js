@@ -3,7 +3,7 @@ const app = getApp()
 const towxml = require('../../towxml/index')
 const hitokoto = require('../../utils/hitokoto')
 const hitokotoManager = hitokoto.hitokotoManager
-const { themeManager } = require('../../utils/theme')
+const themeManagerAlt = require('../../utils/themeManager')
 const { emotionManager } = require('../../utils/emotion')
 const { animationManager } = require('../../utils/animation')
 const { localStorageManager } = require('../../utils/local-storage')
@@ -83,6 +83,12 @@ Page({
   onUnload() {
     // 页面卸载时也记录阅读足迹
     this.recordReadingHistory()
+  },
+
+  toggleThemeQuick() {
+    const newTheme = themeManagerAlt.toggleTheme()
+    this.setData({ currentTheme: newTheme, themeOpacity: 0.98 })
+    setTimeout(() => this.setData({ themeOpacity: 1 }), 200)
   },
 
   onPullDownRefresh() {
@@ -207,8 +213,9 @@ Page({
     }
 
     // 计算字数统计和预计阅读时间
-    if (post.textContent) {
-      let processedTextContent = post.textContent
+    const rawText = post.textContent || ''
+    if (rawText) {
+      let processedTextContent = rawText
       if (typeof processedTextContent === 'string') {
         processedTextContent = processedTextContent.replace(/\\r\\n|\\n/g, '\n')
       }
@@ -232,23 +239,27 @@ Page({
       post.wordCount = wordCount
       post.readingTime = readingTime
 
-      // 使用towxml解析Markdown内容
       try {
-        const towxmlData = towxml(processedTextContent, 'markdown', {
-          base: '',
-          theme: 'light'
-        })
-
-        this.setData({
-          parsedContent: towxmlData,
-          isContentReady: true
-        })
+        const isHtml = /<\w+[^>]*>/.test(processedTextContent)
+        const type = isHtml ? 'html' : 'markdown'
+        const nodes = towxml(processedTextContent, type, { base: '', theme: 'light' })
+        const hasChildren = nodes && nodes.children && nodes.children.length > 0
+        if (hasChildren) {
+          this.setData({ parsedContent: nodes, isContentReady: true })
+        } else {
+          const htmlFallback = isHtml ? processedTextContent : undefined
+          this.setData({
+            post: Object.assign({}, this.data.post, {
+              content: htmlFallback || post.content || processedTextContent
+            }),
+            isContentReady: true
+          })
+        }
       } catch (error) {
         console.error('towxml解析失败:', error)
-        // 解析失败时使用原始内容
         this.setData({
           post: Object.assign({}, this.data.post, {
-            content: post.content || post.textContent
+            content: post.content || processedTextContent
           }),
           isContentReady: true
         })

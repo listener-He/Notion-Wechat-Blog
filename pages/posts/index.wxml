@@ -1,5 +1,4 @@
 <!--pages/posts/index.wxml-->
-<view class="page-bg"></view>
 <view class="container theme-transition" style="opacity: {{themeOpacity}}">
   <!-- 页面头部 -->
   <view class="page-header">
@@ -76,7 +75,7 @@
         bindblur="onSearchBlur"
       />
       <view class="search-btn" bindtap="onSearch">
-        <text class="iconfont icon-search">🔍</text>
+        <icon name="search" size="28" color="var(--theme-text-primary)" />
       </view>
     </view>
     
@@ -143,7 +142,7 @@
       class="tag {{selectedTag === item.name ? 'active' : ''}}"
       bindtap="onTagSelect"
       data-tag="{{item.name}}"
-      style="background-color: {{item.color || 'var(--color-hover)'}}"
+      style="background-color: {{item.color || 'var(--theme-bg-tertiary)'}}"
     >
       {{item.name}} ({{item.count}})
     </view>
@@ -155,7 +154,7 @@
       <text class="toggle-text">{{showTagFilter ? '隐藏标签' : '显示标签'}}</text>
       <text class="toggle-arrow"></text>
     </view>
-    <view class="text-right" style="font-size: 24rpx; color: var(--color-text-secondary);">
+    <view class="text-right" style="font-size: 24rpx; color: var(--theme-text-secondary);">
       共 {{total}} 篇文章
     </view>
   </view>
@@ -196,7 +195,7 @@
             wx:for-index="tagIndex"
             wx:key="*this"
             class="tag"
-            style="background-color: {{tag.color || 'var(--color-hover)'}}"
+            style="background-color: {{tag.color || 'var(--theme-bg-tertiary)'}}"
           >
             {{tag.name || tag}}
           </view>
@@ -205,7 +204,7 @@
         <!-- 文章元信息 -->
         <view class="post-meta">
           <view class="post-date">
-            📅 {{item.publishDay || item.publishDate}}
+            <icon name="calendar" size="24" color="var(--theme-text-secondary)" /> {{item.publishDay || item.publishDate}}
           </view>
           <view wx:if="{{item.category}}" class="post-category">
             {{item.category}}
@@ -232,7 +231,7 @@
 
   <!-- 空状态 -->
   <view wx:if="{{!loading && posts.length === 0}}" class="empty">
-    <view class="empty-icon">📝</view>
+    <icon name="edit" size="48" color="var(--theme-text-secondary)" />
     <view class="empty-text">
       {{searchKeyword || selectedCategory || selectedTag ? '没有找到相关文章' : '暂无文章'}}
     </view>
@@ -257,7 +256,7 @@
   <view 
     wx:if="{{!loading && posts.length > 0 && !hasMore}}"
     class="text-center mt-30"
-    style="color: var(--color-text-secondary); font-size: 24rpx;"
+    style="color: var(--theme-text-secondary); font-size: 24rpx;"
   >
     没有更多文章了
   </view>

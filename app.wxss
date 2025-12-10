@@ -5,37 +5,16 @@
 
 /* 全局样式 */
 page {
-  background: linear-gradient(135deg, var(--color-accent, #667eea) 0%, var(--color-accent-dark, #764ba2) 100%);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--color-text-primary, #333);
+  background-color: var(--theme-bg-primary);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--theme-text-primary);
   min-height: 100vh;
 }
 
 /* 页面背景装饰 */
-.page-bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, var(--color-accent, #667eea) 0%, var(--color-accent-dark, #764ba2) 100%);
-  z-index: -1;
-}
-
-.page-bg::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: 
-    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.2) 0%, transparent 50%);
-}
+/* 移除复杂装饰背景，采用主题变量 */
 
 /* 容器 */
 .container {

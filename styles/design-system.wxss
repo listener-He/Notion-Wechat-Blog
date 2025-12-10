@@ -388,25 +388,7 @@ page {
 
 /* ==================== 打印样式 ==================== */
 
-@media print {
-  .no-print {
-    display: none !important;
-  }
-  
-  .print-only {
-    display: block !important;
-  }
-  
-  page {
-    background: white !important;
-    color: black !important;
-  }
-  
-  .card {
-    box-shadow: none !important;
-    border: 1rpx solid #ccc !important;
-  }
-}
+/* 小程序不支持@media print，移除打印样式 */
 
 /* ==================== 工具类集合 ==================== */
 

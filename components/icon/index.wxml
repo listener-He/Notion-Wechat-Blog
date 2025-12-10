@@ -1,0 +1,1 @@
+<image src="{{svgSrc}}" class="icon" style="width: {{size}}rpx; height: {{size}}rpx;" mode="widthFix" aria-hidden="true" />
