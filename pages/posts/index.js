@@ -6,25 +6,25 @@ const { emotionManager } = require('../../utils/emotion.js')
 const { animationManager } = require('../../utils/animation.js')
 const { localStorageManager } = require('../../utils/local-storage.js')
 
-// 根据标签名生成颜色 - 使用Pantone历年流行色调色板
-function generateTagColor(tagName) {
-  // 使用主题系统的颜色变量生成标签颜色
-  const themeColors = [
-    'var(--color-accent, #3A6EA5)',
-    'var(--color-accent-light, #5B9BD5)', 
-    'var(--color-success, #27AE60)',
-    'var(--color-info, #3498DB)',
-    'var(--color-warning, #F39C12)',
-    'var(--color-button-secondary, #95A5A6)'
-  ]
+// 标签渐变调色盘与生成函数（顶层定义）
+const GRADIENTS = [
+  ['#667eea', '#764ba2'],
+  ['#36d1dc', '#5b86e5'],
+  ['#ff9966', '#ff5e62'],
+  ['#00b09b', '#96c93d'],
+  ['#f7971e', '#ffd200'],
+  ['#56ab2f', '#a8e063'],
+  ['#2b5876', '#4e4376'],
+  ['#bdc3c7', '#2c3e50']
+]
 
-  // 使用标签名的字符码生成索引
+function generateTagGradient(tagName = '') {
   let hash = 0
   for (let i = 0; i < tagName.length; i++) {
     hash = tagName.charCodeAt(i) + ((hash << 5) - hash)
   }
-
-  return themeColors[Math.abs(hash) % themeColors.length]
+  const pair = GRADIENTS[Math.abs(hash) % GRADIENTS.length]
+  return `linear-gradient(135deg, ${pair[0]} 0%, ${pair[1]} 100%)`
 }
 
 Page({
@@ -32,14 +32,19 @@ Page({
     posts: [],
     categories: [],
     tags: [],
+    tagsToShow: [],
     loading: true,
     loadingMore: false,
     showSkeleton: false,
     searchKeyword: '',
     selectedCategory: '',
-    selectedTag: '',
+    selectedTags: [],
     showTagFilter: false,
+    showTagExpanded: false,
     showSearchHistory: false,
+    suggestionsVisible: false,
+    suggestionCategories: [],
+    suggestionTags: [],
     searchHistory: [],
     currentPage: 1,
     pageSize: 10,
@@ -63,7 +68,19 @@ Page({
     // 本地存储相关
     readingHistory: [],
     favoriteIds: [],
-    showHistorySection: false
+    showHistorySection: false,
+    coverLoadedMap: {},
+    exhausted: false,
+    coverFallbackMap: {},
+  },
+    coverFallbackMap: {},
+  },
+
+  // 更新展示的标签集合
+  updateTagsToShow() {
+    const limit = this.data.showTagExpanded ? 16 : 8
+    const list = (this.data.tags || []).slice(0, limit)
+    this.setData({ tagsToShow: list })
   },
 
   onLoad() {
@@ -71,6 +88,7 @@ Page({
 
     // 初始化主题
     this.initTheme()
+    this.coverTimers = {}
 
     // 初始化情感化互动
     this.initEmotionalInteraction()
@@ -82,6 +100,7 @@ Page({
     this.loadHitokoto()
 
     this.loadSearchHistory()
+    this.loadFilterPreferences()
     this.loadInitialData()
     // 标记已经加载过初始数据
     this.hasLoadedInitialData = true
@@ -237,11 +256,11 @@ Page({
           if (typeof tag === 'string') {
             return {
               name: tag,
-              color: generateTagColor(tag)
+              gradient: generateTagGradient(tag)
             }
           } else if (tag && tag.name) {
             return Object.assign({}, tag, {
-              color: tag.color || generateTagColor(tag.name)
+              gradient: tag.gradient || generateTagGradient(tag.name)
             })
           }
           return tag
@@ -267,6 +286,8 @@ Page({
     try {
       if (reset) {
         this.setData({ currentPage: 1 })
+        // 重置封面状态和计时器
+        this.resetCoverState()
       }
 
       const params = {
@@ -277,9 +298,6 @@ Page({
       // 添加筛选条件
       if (this.data.selectedCategory) {
         params.category = this.data.selectedCategory
-      }
-      if (this.data.selectedTag) {
-        params.tag = this.data.selectedTag
       }
       if (this.data.searchKeyword) {
         params.keyword = this.data.searchKeyword
@@ -301,11 +319,11 @@ Page({
               if (typeof tag === 'string') {
                 return {
                   name: tag,
-                  color: generateTagColor(tag)
+                  gradient: generateTagGradient(tag)
                 }
               } else if (tag && tag.name) {
                 return Object.assign({}, tag, {
-                  color: tag.color || generateTagColor(tag.name)
+                  gradient: tag.gradient || generateTagGradient(tag.name)
                 })
               }
               return tag
@@ -314,15 +332,25 @@ Page({
           return post
         })
 
+        const hasMore = (typeof pagination.hasNext !== 'undefined')
+          ? !!pagination.hasNext
+          : (newPosts.length === this.data.pageSize)
+
+        const nextPosts = reset ? postsWithColors : this.data.posts.concat(postsWithColors)
+
         this.setData({
-          posts: reset ? postsWithColors : this.data.posts.concat(postsWithColors),
-          total: pagination.total || 0,
-          hasMore: pagination.hasNext || false,
-          currentPage: pagination.current || 1
+          posts: nextPosts,
+          total: pagination.total || nextPosts.length,
+          hasMore,
+          exhausted: !hasMore,
+          currentPage: pagination.current || (reset ? 1 : this.data.currentPage)
         })
 
         // 更新文章的收藏和阅读状态
         this.updatePostsStatus()
+
+        // 为当前批次封面设置超时兜底
+        this.scheduleCoverFallbackTimers(postsWithColors)
       }
 
       return result
@@ -332,11 +360,80 @@ Page({
     }
   },
 
+  // 封面加载完成，触发渐入
+  onCoverLoad(e) {
+    const id = e.currentTarget.dataset.id
+    const map = Object.assign({}, this.data.coverLoadedMap, { [id]: true })
+    this.setData({ coverLoadedMap: map })
+    if (this.coverTimers && this.coverTimers[id]) {
+      clearTimeout(this.coverTimers[id])
+      delete this.coverTimers[id]
+    }
+  },
+
+  onCoverError(e) {
+    const id = e.currentTarget.dataset.id
+    if (this.data.coverFallbackMap[id]) {
+      const loaded = Object.assign({}, this.data.coverLoadedMap, { [id]: true })
+      this.setData({ coverLoadedMap: loaded })
+      return
+    }
+    const url = this.getFallbackCover(id)
+    const map = Object.assign({}, this.data.coverFallbackMap, { [id]: url })
+    this.setData({ coverFallbackMap: map })
+    if (this.coverTimers && this.coverTimers[id]) {
+      clearTimeout(this.coverTimers[id])
+      delete this.coverTimers[id]
+    }
+  },
+
+  getFallbackCover(id) {
+    const seed = encodeURIComponent(id || (Date.now() + ''))
+    return `https://picsum.photos/seed/${seed}/600/360`
+  },
+
+  scheduleCoverFallbackTimers(batch) {
+    if (!Array.isArray(batch)) return
+    if (!this.coverTimers) this.coverTimers = {}
+    batch.forEach(post => {
+      const id = post && (post.id || post.slug)
+      const hasCover = !!(post && (post.pageCover || post.pageCoverThumbnail))
+      if (!id || !hasCover) return
+      if (this.data.coverLoadedMap[id] || this.data.coverFallbackMap[id] || this.coverTimers[id]) return
+      this.coverTimers[id] = setTimeout(() => {
+        if (!this.data.coverLoadedMap[id]) {
+          const url = this.getFallbackCover(id)
+          const map = Object.assign({}, this.data.coverFallbackMap, { [id]: url })
+          this.setData({ coverFallbackMap: map })
+        }
+      }, 2000)
+    })
+  },
+
+  resetCoverState() {
+    if (this.coverTimers) {
+      Object.keys(this.coverTimers).forEach(id => {
+        clearTimeout(this.coverTimers[id])
+      })
+      this.coverTimers = {}
+    }
+    this.setData({ coverLoadedMap: {}, coverFallbackMap: {} })
+  },
+
   // 搜索输入
   onSearchInput(e) {
-    this.setData({
-      searchKeyword: e.detail.value
-    })
+    const keyword = (e.detail.value || '').trim()
+    this.setData({ searchKeyword: keyword })
+
+    if (!keyword) {
+      this.setData({ suggestionsVisible: false, suggestionCategories: [], suggestionTags: [] })
+      return
+    }
+
+    const kw = keyword.toLowerCase()
+    const cats = (this.data.categories || []).filter(c => (c.name || '').toLowerCase().includes(kw)).slice(0, 6)
+    const tags = (this.data.tags || []).filter(t => ((t.name || t) + '').toLowerCase().includes(kw)).slice(0, 8)
+    this.setData({ suggestionCategories: cats, suggestionTags: tags, suggestionsVisible: (cats.length + tags.length) > 0 })
   },
 
   // 搜索框获得焦点
@@ -391,9 +488,9 @@ Page({
     try {
       this.setData({
         selectedCategory: category,
-        selectedTag: '', // 清空标签筛选
         loading: true
       })
+      this.saveFilterPreferences()
       await this.loadPosts(true)
     } catch (error) {
       app.showError('筛选失败')
@@ -407,19 +504,86 @@ Page({
     const tag = e.currentTarget.dataset.tag
     console.log('选择标签:', tag)
 
-    if (tag === this.data.selectedTag) {
-      return
-    }
-
     try {
+      let selected = [...this.data.selectedTags]
+      if (!tag || tag === '') {
+        selected = []
+      } else {
+        const idx = selected.indexOf(tag)
+        if (idx >= 0) {
+          selected.splice(idx, 1)
+        } else {
+          selected.push(tag)
+        }
+      }
+
       this.setData({
-        selectedTag: tag,
-        selectedCategory: '', // 清空分类筛选
+        selectedTags: selected,
+        selectedCategory: selected.length > 0 ? '' : this.data.selectedCategory,
         loading: true
       })
+      this.saveFilterPreferences()
       await this.loadPosts(true)
     } catch (error) {
       app.showError('筛选失败')
+    } finally {
+      this.setData({ loading: false })
+    }
+  },
+
+  // 搜索联想点击-分类
+  async onSuggestionTapCategory(e) {
+    const category = e.currentTarget.dataset.category
+    try {
+      this.setData({
+        selectedCategory: category,
+        suggestionsVisible: false,
+        loading: true
+      })
+      this.saveFilterPreferences()
+      await this.loadPosts(true)
+    } catch (error) {
+      app.showError('筛选失败')
+    } finally {
+      this.setData({ loading: false })
+    }
+  },
+
+  // 搜索联想点击-标签
+  async onSuggestionTapTag(e) {
+    const tag = e.currentTarget.dataset.tag
+    try {
+      this.setData({
+        selectedCategory: '',
+        searchKeyword: tag,
+        suggestionsVisible: false,
+        loading: true,
+        hasMore: true,
+        exhausted: false
+      })
+      this.saveFilterPreferences()
+      await this.loadPosts(true)
+    } catch (error) {
+      app.showError('筛选失败')
+    } finally {
+      this.setData({ loading: false })
+    }
+  },
+
+  // 切换标签展开
+  toggleTagExpand() {
+    this.setData({ showTagExpanded: !this.data.showTagExpanded })
+    this.updateTagsToShow()
+  },
+
+  // 清除分类
+  async clearCategory() {
+    try {
+      this.setData({ selectedCategory: '', loading: true, hasMore: true, exhausted: false })
+      this.saveFilterPreferences()
+      await this.loadPosts(true)
+    } catch (error) {
+      app.showError('清除分类失败')
     } finally {
       this.setData({ loading: false })
     }
@@ -430,6 +594,34 @@ Page({
     this.setData({
       showTagFilter: !this.data.showTagFilter
     })
+    this.saveFilterPreferences()
+  },
+
+  // 清空筛选
+  async clearFilters() {
+    try {
+      this.setData({
+        selectedCategory: '',
+        searchKeyword: '',
+        loading: true,
+        hasMore: true,
+        exhausted: false
+      })
+      this.saveFilterPreferences()
+      await this.loadPosts(true)
+    } catch (error) {
+      app.showError('清空筛选失败')
+    } finally {
+      this.setData({ loading: false })
+    }
+  },
+
+  // 分类长按提示
+  onCategoryLongPress(e) {
+    const name = e.currentTarget.dataset.category
+    const item = (this.data.categories || []).find(c => c.name === name)
+    const count = item ? (item.count || 0) : 0
+    wx.showToast({ title: `${name || '全部'} · ${count} 篇`, icon: 'none', duration: 1500 })
   },
 
   // 加载更多
@@ -732,7 +924,7 @@ Page({
       const history = await localStorageManager.getReadingHistory()
       // 加载收藏列表
       const favorites = await localStorageManager.getFavorites()
-      const favoriteIds = favorites.map(item => item.id || item.slug)
+      const favoriteIds = favorites.map(item => item.postId || item.id || item.slug)
 
       this.setData({
         readingHistory: history.slice(0, 5), // 只显示最近5条
@@ -747,7 +939,7 @@ Page({
   // 更新文章的收藏和阅读状态
   updatePostsStatus() {
     const { posts, favoriteIds, readingHistory } = this.data
-    const historyIds = readingHistory.map(item => item.id || item.slug)
+    const historyIds = readingHistory.map(item => item.postId || item.id || item.slug)
 
     const updatedPosts = posts.map(post => ({
       ...post,
@@ -762,9 +954,41 @@ Page({
   // 获取最后阅读时间
   getLastReadTime(postId) {
     const historyItem = this.data.readingHistory.find(item =>
-      (item.id || item.slug) === postId
+      (item.postId || item.id || item.slug) === postId
     )
-    return historyItem ? historyItem.visitTime : null
+    return historyItem ? (historyItem.readAt || historyItem.visitTime || null) : null
+  },
+
+  // 加载筛选偏好（分类/标签/标签开关）
+  loadFilterPreferences() {
+    try {
+      const prefs = StorageUtil.get('posts_filter')
+      if (prefs) {
+        this.setData({
+          selectedCategory: prefs.selectedCategory || '',
+          selectedTags: Array.isArray(prefs.selectedTags) ? prefs.selectedTags : (prefs.selectedTag ? [prefs.selectedTag] : []),
+          showTagFilter: !!prefs.showTagFilter
+        })
+        this.updateTagsToShow()
+      }
+    } catch (error) {
+      console.error('加载筛选偏好失败:', error)
+    }
+  },
+
+  // 保存筛选偏好
+  saveFilterPreferences() {
+    try {
+      const prefs = {
+        selectedCategory: this.data.selectedCategory,
+        selectedTags: this.data.selectedTags,
+        showTagFilter: this.data.showTagFilter
+      }
+      // 缓存30天
+      StorageUtil.set('posts_filter', prefs, CACHE_TIME.MONTH)
+    } catch (error) {
+      console.error('保存筛选偏好失败:', error)
+    }
   }
 
 })

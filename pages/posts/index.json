@@ -1,9 +1,9 @@
 {
   "navigationBarTitleText": "文章",
   "enablePullDownRefresh": true,
-  "onReachBottomDistance": 50,
+  "onReachBottomDistance": 400,
   "backgroundTextStyle": "dark",
-  "backgroundColor": "#f8f9fa",
+  "backgroundColor": "#ffffff",
   "usingComponents": {
     "icon": "/components/icon/index"
   }

@@ -8,3 +8,11 @@
 .ripple-effect { position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.3); transform: scale(0); animation: ripple 0.6s linear; pointer-events: none; }
 @keyframes ripple { to { transform: scale(4); opacity: 0; } }
 :root { --duration-fast: 150ms; --duration-base: 250ms; --duration-theme: 300ms; --timing-function: cubic-bezier(0.2, 0, 0.2, 1); --timing-function-theme: cubic-bezier(0.4, 0, 0.2, 1); }
+
+/* 按钮悬浮与点击动画（统一） */
+.btn-hover { transition: box-shadow var(--duration-base) var(--timing-function), transform var(--duration-base) var(--timing-function); }
+.btn-hover:hover { transform: translateY(-2rpx); box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.12); }
+
+/* 点赞动画（心形） */
+.like-heart { animation: likeHeart var(--duration-base) cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+@keyframes likeHeart { 0% { transform: scale(1); } 15% { transform: scale(1.2); } 30% { transform: scale(0.95); } 45% { transform: scale(1.1); } 80% { transform: scale(1.03); } 100% { transform: scale(1); } }

@@ -3,7 +3,7 @@ const app = getApp()
 const towxml = require('../../towxml/index')
 const hitokoto = require('../../utils/hitokoto')
 const hitokotoManager = hitokoto.hitokotoManager
-const themeManagerAlt = require('../../utils/themeManager')
+const themeManager = require('../../utils/themeManager')
 const { emotionManager } = require('../../utils/emotion')
 const { animationManager } = require('../../utils/animation')
 const { localStorageManager } = require('../../utils/local-storage')
@@ -625,7 +625,13 @@ Page({
         visitTime: readingStartTime
       }
 
-      await localStorageManager.updateReadingTime(historyInfo)
+      await localStorageManager.recordReadingHistory({
+        id: historyInfo.id,
+        slug: historyInfo.slug,
+        title: historyInfo.title,
+        category: historyInfo.category,
+        tags: historyInfo.tags
+      }, historyInfo.readingTime, 0)
     } catch (error) {
       console.error('记录阅读足迹失败:', error)
     }

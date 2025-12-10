@@ -77,19 +77,25 @@ Page({
 
   // 处理历史数据
   processHistoryData(history) {
-    return history.map(item => ({
-      ...item,
-      formattedTime: this.formatTime(item.visitTime),
-      formattedReadingTime: this.formatReadingTime(item.readingTime || 0),
-      relativeTime: this.getRelativeTime(item.visitTime)
-    })).sort((a, b) => {
+    return history.map(item => {
+      const timestamp = Number(item.readAt || item.visitTime || Date.now())
+      const totalTime = item.totalReadingTime != null ? item.totalReadingTime : (item.readingTime || 0)
+      return {
+        ...item,
+        formattedTime: this.formatTime(timestamp),
+        formattedReadingTime: this.formatReadingTime(totalTime),
+        relativeTime: this.getRelativeTime(timestamp),
+        visitTime: timestamp,
+        readingTime: totalTime
+      }
+    }).sort((a, b) => {
       switch (this.data.sortBy) {
         case 'readingTime':
           return (b.readingTime || 0) - (a.readingTime || 0)
         case 'category':
           return (a.category || '').localeCompare(b.category || '')
         default:
-          return b.visitTime - a.visitTime
+          return (b.visitTime || 0) - (a.visitTime || 0)
       }
     })
   },
@@ -98,8 +104,8 @@ Page({
   processFavoritesData(favorites) {
     return favorites.map(item => ({
       ...item,
-      formattedTime: this.formatTime(item.favoriteTime || Date.now())
-    })).sort((a, b) => (b.favoriteTime || 0) - (a.favoriteTime || 0))
+      formattedTime: this.formatTime(item.addedAt || Date.now())
+    })).sort((a, b) => (b.addedAt || 0) - (a.addedAt || 0))
   },
 
   // 处理统计数据
@@ -124,12 +130,16 @@ Page({
     // 按月份统计
     const monthlyStats = {}
     history.forEach(item => {
-      const month = new Date(item.visitTime).toISOString().slice(0, 7)
+      const ts = Number(item.readAt || item.visitTime)
+      if (!ts || isNaN(ts)) return
+      const d = new Date(ts)
+      if (isNaN(d.getTime())) return
+      const month = d.toISOString().slice(0, 7)
       if (!monthlyStats[month]) {
         monthlyStats[month] = { count: 0, totalTime: 0 }
       }
       monthlyStats[month].count++
-      monthlyStats[month].totalTime += (item.readingTime || 0)
+      monthlyStats[month].totalTime += (item.totalReadingTime != null ? item.totalReadingTime : (item.readingTime || 0))
     })
 
     return {
@@ -202,7 +212,7 @@ Page({
     const item = this.data.historyList[index]
 
     try {
-      await localStorageManager.removeFromHistory(item.id || item.slug)
+      await localStorageManager.removeFromHistory(item.postId || item.id || item.slug)
       wx.showToast({
         title: '删除成功',
         icon: 'success'
@@ -222,7 +232,7 @@ Page({
     const item = this.data.favoritesList[index]
 
     try {
-      await localStorageManager.removeFavorite(item.id || item.slug)
+      await localStorageManager.removeFavorite(item.postId || item.id || item.slug)
       wx.showToast({
         title: '取消收藏成功',
         icon: 'success'

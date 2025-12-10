@@ -80,7 +80,7 @@
 
 .container {
   padding-bottom: 120rpx; /* 为底部操作栏留出空间 */
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: var(--theme-bg-primary);
   min-height: 100vh;
 }
 
@@ -110,7 +110,7 @@
 .default-bg {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--theme-accent-start) 0%, var(--theme-accent-end) 100%);
 }
 
 .bg-overlay {
@@ -129,7 +129,7 @@
   left: 0;
   right: 0;
   padding: 50rpx 40rpx;
-  color: #333;
+  color: var(--theme-text-primary);
   background: rgba(255, 255, 255, 0.9);
   margin: 0 30rpx 20rpx;
   border-radius: 20rpx;
@@ -297,7 +297,7 @@
 .copyright-title {
   font-size: 34rpx;
   font-weight: 600;
-  color: #333;
+  color: var(--theme-text-primary);
   margin-bottom: 24rpx;
   display: flex;
   align-items: center;
@@ -315,13 +315,13 @@
 }
 
 .copyright-label {
-  color: #666;
+  color: var(--theme-text-secondary);
   margin-right: 8rpx;
   flex-shrink: 0;
 }
 
 .copyright-value {
-  color: #333;
+  color: var(--theme-text-primary);
   flex: 1;
   word-break: break-all;
 }
@@ -335,7 +335,7 @@
 .post-content h6 {
   font-weight: bold;
   margin: 30rpx 0 20rpx 0;
-  color: #333;
+  color: var(--theme-text-primary);
 }
 
 .post-content h1 {
@@ -365,14 +365,14 @@
 .post-content blockquote {
   padding: 20rpx;
   margin: 20rpx 0;
-  background-color: #f8f9fa;
-  border-left: 4rpx solid #667eea;
+  background-color: var(--theme-bg-secondary);
+  border-left: 4rpx solid var(--theme-accent-start);
   border-radius: 0 8rpx 8rpx 0;
 }
 
 .post-content code {
   padding: 4rpx 8rpx;
-  background-color: #f1f3f4;
+  background-color: var(--theme-bg-light);
   border-radius: 4rpx;
   font-family: 'Courier New', monospace;
   font-size: 26rpx;
@@ -380,7 +380,7 @@
 
 .post-content pre {
   padding: 20rpx;
-  background-color: #f8f8f8;
+  background-color: var(--theme-bg-secondary);
   border-radius: 8rpx;
   overflow-x: auto;
   margin: 20rpx 0;

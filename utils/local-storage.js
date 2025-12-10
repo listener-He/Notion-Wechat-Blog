@@ -115,6 +115,56 @@ class LocalStorageManager {
   }
 
   /**
+   * 更新阅读时间（兼容旧调用）
+   * @param {Object} historyInfo - { id/slug/title/category/tags, readingTime, visitTime }
+   */
+  async updateReadingTime(historyInfo) {
+    try {
+      const postInfo = {
+        id: historyInfo.id,
+        slug: historyInfo.slug,
+        title: historyInfo.title,
+        category: historyInfo.category,
+        tags: historyInfo.tags || []
+      }
+      const readingTime = historyInfo.readingTime || 0
+      const progress = 0
+      return await this.recordReadingHistory(postInfo, readingTime, progress)
+    } catch (error) {
+      console.error('更新阅读时间失败:', error)
+      return null
+    }
+  }
+
+  /**
+   * 删除单条阅读历史（按 id 或 slug）
+   */
+  async removeFromHistory(postId) {
+    try {
+      const history = await this.getReadingHistory()
+      const newHistory = history.filter(item => item.postId !== postId && item.slug !== postId)
+      await StorageUtil.set(this.STORAGE_KEYS.READING_HISTORY, newHistory)
+      return { success: true }
+    } catch (error) {
+      console.error('删除历史失败:', error)
+      return { success: false }
+    }
+  }
+
+  /**
+   * 清空阅读历史
+   */
+  async clearHistory() {
+    try {
+      await StorageUtil.set(this.STORAGE_KEYS.READING_HISTORY, [])
+      return { success: true }
+    } catch (error) {
+      console.error('清空历史失败:', error)
+      return { success: false }
+    }
+  }
+
+  /**
    * 获取阅读历史
    * @param {number} limit - 限制数量
    * @param {string} category - 分类筛选
@@ -260,6 +310,19 @@ class LocalStorageManager {
     } catch (error) {
       console.error('检查收藏状态失败:', error)
       return false
+    }
+  }
+
+  /**
+   * 清空收藏夹
+   */
+  async clearFavorites() {
+    try {
+      await StorageUtil.set(this.STORAGE_KEYS.FAVORITES, [])
+      return { success: true }
+    } catch (error) {
+      console.error('清空收藏夹失败:', error)
+      return { success: false }
     }
   }
 
@@ -729,5 +792,6 @@ const localStorageManager = new LocalStorageManager()
 
 // 添加别名方法以保持向后兼容
 localStorageManager.addToHistory = localStorageManager.recordReadingHistory
+localStorageManager.removeFavorite = localStorageManager.removeFromFavorites
 
 module.exports = { localStorageManager }

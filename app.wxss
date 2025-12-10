@@ -1,7 +1,7 @@
 /* app.wxss */
 @import "./styles/design-system.wxss";
 @import "./styles/theme.wxss";
-@import "./styles/animations.wxss";
+/* 动效统一由 animations2.wxss 提供 */
 
 /* 全局样式 */
 page {
@@ -23,53 +23,40 @@ page {
   position: relative;
 }
 
+/* 主题背景：白天淡雅清新 / 夜晚深空宇宙 */
+.container.theme-light {
+  background: linear-gradient(135deg, #f7fbff 0%, #eaf3ff 100%);
+}
+
+.container.theme-dark {
+  background: radial-gradient(1200rpx at 20% 10%, rgba(64, 78, 120, 0.15), transparent 60%),
+              linear-gradient(180deg, #0b1020 0%, #0e1326 100%);
+}
+
 /* 页面头部背景 */
 .page-header {
   position: relative;
-  height: 400rpx;
-  margin: -20rpx -20rpx 40rpx -20rpx;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 0 0 50rpx 50rpx;
-  overflow: hidden;
-}
-
-.page-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: 
-    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
-    radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  padding: 48rpx 30rpx 32rpx;
+  margin: 0 -30rpx 32rpx;
+  background: linear-gradient(135deg, var(--theme-accent-start) 0%, var(--theme-accent-end) 100%);
+  border-radius: 0 0 16rpx 16rpx;
 }
 
 .page-header-content {
-  position: relative;
-  z-index: 2;
-  padding: 100rpx 40rpx 60rpx;
   text-align: center;
-  color: white;
-  background-image: url('https://blog-file.hehouhui.cn/202305111934350.jpeg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  border-radius: 16rpx;
-  overflow: hidden;
+  color: var(--theme-text-white);
 }
 
 .page-title {
-  font-size: 48rpx;
-  font-weight: 700;
-  margin-bottom: 20rpx;
-  text-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.3);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: 12rpx;
 }
 
 .page-subtitle {
-  font-size: 28rpx;
-  opacity: 0.9;
-  font-weight: 300;
+  font-size: var(--font-size-base);
+  opacity: 0.85;
+  font-weight: var(--font-weight-light);
 }
 
 /* 卡片样式 */

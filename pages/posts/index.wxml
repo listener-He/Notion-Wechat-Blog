@@ -1,5 +1,5 @@
 <!--pages/posts/index.wxml-->
-<view class="container theme-transition" style="opacity: {{themeOpacity}}">
+<view class="container theme-transition {{currentTheme === 'dark' ? 'theme-dark' : 'theme-light'}}" style="opacity: {{themeOpacity}}">
   <!-- 页面头部 -->
   <view class="page-header">
     <view class="page-header-content">
@@ -78,7 +78,27 @@
         <icon name="search" size="28" color="var(--theme-text-primary)" />
       </view>
     </view>
-    
+
+    <!-- 搜索联想 -->
+    <view wx:if="{{suggestionsVisible}}" class="search-suggestions">
+      <view wx:if="{{suggestionCategories.length > 0}}" class="suggestion-section">
+        <text class="suggestion-title">分类</text>
+        <view class="suggestion-list">
+          <view wx:for="{{suggestionCategories}}" wx:key="name" class="suggestion-item ripple" bindtap="onSuggestionTapCategory" data-category="{{item.name}}">
+            {{item.name}} ({{item.count}})
+          </view>
+        </view>
+      </view>
+      <view wx:if="{{suggestionTags.length > 0}}" class="suggestion-section">
+        <text class="suggestion-title">标签</text>
+        <view class="suggestion-list">
+          <view wx:for="{{suggestionTags}}" wx:key="name" class="suggestion-item ripple" bindtap="onSuggestionTapTag" data-tag="{{item.name || item}}">
+            {{item.name || item}}
+          </view>
+        </view>
+      </view>
+    </view>
+
     <!-- 搜索历史 -->
     <view wx:if="{{showSearchHistory && searchHistory.length > 0}}" class="search-history">
       <view class="search-history-header">
@@ -103,10 +123,15 @@
 
   <!-- 筛选栏 -->
   <view class="filter-container">
+    <view wx:if="{{selectedCategory}}" class="active-category-pill">
+      <text class="pill-text">{{selectedCategory}}</text>
+      <view class="pill-close" bindtap="clearCategory">×</view>
+    </view>
     <view class="filter-bar">
       <view 
         class="filter-item {{selectedCategory === '' ? 'active' : ''}}"
         bindtap="onCategorySelect"
+        bindlongpress="onCategoryLongPress"
         data-category=""
       >
         全部
@@ -116,8 +141,9 @@
           <view 
             wx:for="{{categories}}" 
             wx:key="name"
-            class="filter-item {{selectedCategory === item.name ? 'active' : ''}}"
+            class="filter-item {{selectedCategory === item.name ? 'active' : ''}} {{item.count >= popThreshold ? 'pop' : ''}}"
             bindtap="onCategorySelect"
+            bindlongpress="onCategoryLongPress"
             data-category="{{item.name}}"
           >
             {{item.name}} ({{item.count}})
@@ -127,35 +153,11 @@
     </view>
   </view>
 
-  <!-- 标签筛选 -->
-  <view wx:if="{{showTagFilter}}" class="tags mb-30">
-    <view 
-      class="tag {{selectedTag === '' ? 'active' : ''}}"
-      bindtap="onTagSelect"
-      data-tag=""
-    >
-      全部标签
-    </view>
-    <view 
-      wx:for="{{tags}}" 
-      wx:key="name"
-      class="tag {{selectedTag === item.name ? 'active' : ''}}"
-      bindtap="onTagSelect"
-      data-tag="{{item.name}}"
-      style="background-color: {{item.color || 'var(--theme-bg-tertiary)'}}"
-    >
-      {{item.name}} ({{item.count}})
-    </view>
-  </view>
-
   <!-- 标签筛选开关 -->
   <view class="flex-between mb-20">
-    <view class="tag-toggle-btn" bindtap="toggleTagFilter">
-      <text class="toggle-text">{{showTagFilter ? '隐藏标签' : '显示标签'}}</text>
-      <text class="toggle-arrow"></text>
-    </view>
-    <view class="text-right" style="font-size: 24rpx; color: var(--theme-text-secondary);">
-      共 {{total}} 篇文章
+    <view class="flex-right" style="gap: 16rpx; align-items: center;">
+      <text style="font-size: 24rpx; color: var(--theme-text-secondary);">共 {{total}} 篇文章</text>
+      <view class="btn btn-outline ripple" style="padding: 10rpx 16rpx; border-radius: 16rpx;" bindtap="clearFilters">清空筛选</view>
     </view>
   </view>
 
@@ -170,13 +172,19 @@
       data-id="{{item.id}}"
     >
       <!-- 文章封面 -->
-      <image 
-        wx:if="{{item.pageCoverThumbnail}}"
-        class="post-cover" 
-        src="{{item.pageCoverThumbnail}}" 
-        mode="aspectFill"
-        lazy-load
-      />
+      <view wx:if="{{item.pageCover || item.pageCoverThumbnail || coverFallbackMap[item.id]}}" class="post-cover-wrap">
+        <view wx:if="{{!coverLoadedMap[item.id]}}" class="cover-placeholder skeleton"></view>
+        <image 
+          wx:if="{{item.pageCover || item.pageCoverThumbnail || coverFallbackMap[item.id]}}"
+          class="post-cover {{coverLoadedMap[item.id] ? 'loaded' : ''}}" 
+          src="{{coverFallbackMap[item.id] || item.pageCover || item.pageCoverThumbnail}}" 
+          mode="aspectFill"
+          lazy-load
+          bindload="onCoverLoad"
+          binderror="onCoverError"
+          data-id="{{item.id}}"
+        />
+      </view>
       
       <view class="post-content">
         <!-- 文章标题 -->
@@ -187,20 +195,22 @@
           {{item.summary}}
         </view>
         
-        <!-- 文章标签 -->
-        <view wx:if="{{item.tags && item.tags.length > 0}}" class="tags">
+        
+        
+        <!-- 标签显示 -->
+        <view wx:if="{{item.tags && item.tags.length > 0}}" class="tag-chips">
           <view 
             wx:for="{{item.tags}}" 
             wx:for-item="tag"
             wx:for-index="tagIndex"
-            wx:key="*this"
-            class="tag"
-            style="background-color: {{tag.color || 'var(--theme-bg-tertiary)'}}"
+            wx:key="name"
+            class="tag-chip"
+            style="background: {{tag.gradient}}"
           >
             {{tag.name || tag}}
           </view>
         </view>
-        
+
         <!-- 文章元信息 -->
         <view class="post-meta">
           <view class="post-date">
@@ -233,7 +243,7 @@
   <view wx:if="{{!loading && posts.length === 0}}" class="empty">
     <icon name="edit" size="48" color="var(--theme-text-secondary)" />
     <view class="empty-text">
-      {{searchKeyword || selectedCategory || selectedTag ? '没有找到相关文章' : '暂无文章'}}
+      {{searchKeyword || selectedCategory || (selectedTags && selectedTags.length > 0) ? '没有找到相关文章' : '暂无文章'}}
     </view>
   </view>
 

@@ -14,6 +14,10 @@ class ThemeManager {
       backgroundColor: theme === 'dark' ? '#0f172a' : '#ffffff'
     })
   }
+  getCurrentTheme() {
+    const t = wx.getStorageSync('theme') || 'light'
+    return t
+  }
   toggleTheme() {
     const currentTheme = wx.getStorageSync('theme') || 'light'
     const newTheme = currentTheme === 'light' ? 'dark' : 'light'

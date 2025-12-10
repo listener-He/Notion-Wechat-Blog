@@ -14,7 +14,7 @@
         confirm-type="search"
       />
       <view class="search-btn" bindtap="onSearch">
-        <text class="search-icon">🔍</text>
+        <icon name="search" size="28" color="var(--theme-text-white)" />
       </view>
     </view>
     
@@ -97,12 +97,12 @@
           <!-- 元信息 -->
           <view class="post-meta">
             <view class="meta-item">
-              <text class="meta-icon">📅</text>
+              <icon name="calendar" size="22" color="var(--theme-text-secondary)" />
               <text class="meta-text">{{item.publishDate}}</text>
             </view>
             
             <view wx:if="{{item.category}}" class="meta-item">
-              <text class="meta-icon">📂</text>
+              <icon name="folder" size="22" color="var(--theme-text-secondary)" />
               <text class="meta-text">{{item.category}}</text>
             </view>
           </view>
@@ -135,8 +135,8 @@
     </view>
     
     <!-- 空结果 -->
-    <view wx:if="{{posts.length === 0 && !loading}}" class="empty-result">
-      <view class="empty-icon">🔍</view>
+          <view wx:if="{{posts.length === 0 && !loading}}" class="empty-result">
+      <view class="empty-icon"><icon name="search" size="48" color="var(--theme-text-secondary)" /></view>
       <view class="empty-text">没有找到相关文章</view>
       <view class="empty-tips">试试其他关键词吧</view>
     </view>

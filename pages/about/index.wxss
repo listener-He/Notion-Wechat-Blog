@@ -1,22 +1,9 @@
 /* pages/about/index.wxss */
 
-.container {
-  padding: 20rpx;
-  padding-bottom: 120rpx; /* 为底部tab留出空间 */
-  background-color: #f8f9fa;
-  min-height: 100vh;
-}
+.container { padding: 20rpx; padding-bottom: 120rpx; background-color: var(--theme-bg-primary); min-height: 100vh; }
 
 /* 作者信息卡片 */
-.author-card {
-  margin-bottom: 30rpx;
-  padding: 40rpx;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border-radius: 20rpx;
-  box-shadow: 0 8rpx 32rpx rgba(102, 126, 234, 0.3);
-  position: relative;
-}
+.author-card { margin-bottom: 30rpx; padding: 32rpx; background: linear-gradient(135deg, var(--theme-accent-start) 0%, var(--theme-accent-end) 100%); color: var(--theme-text-white); border-radius: 16rpx; box-shadow: 0 8rpx 24rpx var(--theme-shadow); }
 
 .author-header {
   display: flex;
@@ -118,41 +105,22 @@
 .section-title {
   font-size: 32rpx;
   font-weight: bold;
-  color: #333;
+  color: var(--theme-text-primary);
   margin-bottom: 20rpx;
   padding-left: 10rpx;
 }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20rpx;
-}
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24rpx; }
 
-.stat-card {
-  background: white;
-  padding: 30rpx;
-  border-radius: 16rpx;
-  text-align: center;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease;
-}
+.stat-card { background: var(--theme-bg-primary); padding: 24rpx; border-radius: 16rpx; text-align: center; box-shadow: 0 4rpx 20rpx var(--theme-shadow); }
 
 .stat-card:active {
   transform: scale(0.98);
 }
 
-.stat-number {
-  font-size: 48rpx;
-  font-weight: bold;
-  color: #667eea;
-  margin-bottom: 10rpx;
-}
+.stat-number { font-size: var(--font-size-xl); font-weight: var(--font-weight-bold); color: var(--theme-accent-end); margin-bottom: 8rpx; }
 
-.stat-label {
-  font-size: 24rpx;
-  color: #666;
-}
+.stat-label { font-size: var(--font-size-sm); color: var(--theme-text-secondary); }
 
 /* 统计标题行 */
 .stats-header {
@@ -164,7 +132,7 @@
 
 .last-update-text {
   font-size: 22rpx;
-  color: #999;
+  color: var(--theme-text-muted);
   opacity: 0.8;
 }
 
@@ -173,18 +141,13 @@
   margin-bottom: 30rpx;
 }
 
-.latest-posts {
-  background: white;
-  border-radius: 16rpx;
-  overflow: hidden;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
-}
+.latest-posts { background: var(--theme-bg-primary); border-radius: 16rpx; overflow: hidden; box-shadow: 0 4rpx 20rpx var(--theme-shadow); }
 
 .latest-post-item {
   display: flex;
   align-items: center;
   padding: 20rpx;
-  border-bottom: 1rpx solid #f0f0f0;
+  border-bottom: 1rpx solid var(--theme-border-light);
   transition: background-color 0.2s ease;
 }
 
@@ -192,9 +155,7 @@
   border-bottom: none;
 }
 
-.latest-post-item:active {
-  background-color: #f8f9fa;
-}
+.latest-post-item:active { background-color: var(--theme-bg-secondary); }
 
 .latest-post-cover {
   width: 80rpx;
@@ -209,37 +170,22 @@
   min-width: 0;
 }
 
-.latest-post-title {
-  font-size: 28rpx;
-  color: #333;
-  margin-bottom: 8rpx;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+.latest-post-title { font-size: var(--font-size-base); color: var(--theme-text-primary); margin-bottom: 8rpx; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-.latest-post-date {
-  font-size: 24rpx;
-  color: #999;
-}
+.latest-post-date { font-size: var(--font-size-sm); color: var(--theme-text-secondary); }
 
 /* 社交联系 */
 .social-section {
   margin-bottom: 30rpx;
 }
 
-.social-links {
-  background: white;
-  border-radius: 16rpx;
-  overflow: hidden;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
-}
+.social-links { background: var(--theme-bg-primary); border-radius: 16rpx; overflow: hidden; box-shadow: 0 4rpx 20rpx var(--theme-shadow); }
 
 .social-link {
   display: flex;
   align-items: center;
   padding: 25rpx 30rpx;
-  border-bottom: 1rpx solid #f0f0f0;
+  border-bottom: 1rpx solid var(--theme-border-light);
   transition: background-color 0.2s ease;
 }
 
@@ -247,9 +193,7 @@
   border-bottom: none;
 }
 
-.social-link:active {
-  background-color: #f8f9fa;
-}
+.social-link:active { background-color: var(--theme-bg-secondary); }
 
 .social-icon {
   font-size: 32rpx;
@@ -258,30 +202,14 @@
   text-align: center;
 }
 
-.social-text {
-  font-size: 28rpx;
-  color: #333;
-}
+.social-text { font-size: var(--font-size-base); color: var(--theme-text-primary); }
 
 /* 联系客服 */
 .contact-section {
   margin-bottom: 30rpx;
 }
 
-.contact-btn {
-  width: 100%;
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  color: white;
-  border: none;
-  border-radius: 16rpx;
-  padding: 30rpx;
-  font-size: 32rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 8rpx 32rpx rgba(79, 172, 254, 0.3);
-  transition: transform 0.2s ease;
-}
+.contact-btn { width: 100%; background: linear-gradient(135deg, var(--theme-accent-start) 0%, var(--theme-accent-end) 100%); color: var(--theme-text-white); border: none; border-radius: 16rpx; padding: 24rpx; font-size: var(--font-size-md); display: flex; align-items: center; justify-content: center; box-shadow: 0 8rpx 24rpx var(--theme-shadow); }
 
 .contact-btn:active {
   transform: scale(0.98);
@@ -306,12 +234,7 @@
   margin-bottom: 30rpx;
 }
 
-.about-content {
-  background: white;
-  border-radius: 16rpx;
-  padding: 30rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
-}
+.about-content { background: var(--theme-bg-primary); border-radius: 16rpx; padding: 24rpx; box-shadow: 0 4rpx 20rpx var(--theme-shadow); }
 
 .about-item {
   display: flex;
@@ -323,19 +246,9 @@
   margin-bottom: 0;
 }
 
-.about-label {
-  font-size: 28rpx;
-  color: #666;
-  width: 160rpx;
-  flex-shrink: 0;
-}
+.about-label { font-size: var(--font-size-base); color: var(--theme-text-secondary); width: 160rpx; flex-shrink: 0; }
 
-.about-value {
-  font-size: 28rpx;
-  color: #333;
-  flex: 1;
-  word-break: break-all;
-}
+.about-value { font-size: var(--font-size-base); color: var(--theme-text-primary); flex: 1; word-break: break-all; }
 
 /* 加载和错误状态 */
 .loading {
@@ -345,7 +258,7 @@
 
 .loading-text {
   font-size: 28rpx;
-  color: #999;
+  color: var(--theme-text-muted);
 }
 
 .error {
@@ -360,50 +273,8 @@
 
 .error-text {
   font-size: 28rpx;
-  color: #999;
+  color: var(--theme-text-muted);
   margin-bottom: 30rpx;
 }
 
-/* 响应式设计 */
-@media (max-width: 375px) {
-  .stats-grid {
-    gap: 15rpx;
-  }
-  
-  .stat-card {
-    padding: 25rpx;
-  }
-  
-  .stat-number {
-    font-size: 40rpx;
-  }
-}
-
-/* 深色模式支持 */
-@media (prefers-color-scheme: dark) {
-  .container {
-    background-color: #1a1a1a;
-  }
-  
-  .section-title {
-    color: #fff;
-  }
-  
-  .stat-card,
-  .latest-posts,
-  .social-links,
-  .about-content {
-    background: #2a2a2a;
-  }
-  
-  .latest-post-title,
-  .social-text,
-  .about-value {
-    color: #fff;
-  }
-  
-  .latest-post-item:active,
-  .social-link:active {
-    background-color: #3a3a3a;
-  }
-}
+/* 移除不支持的媒体查询，统一由主题变量控制 */
